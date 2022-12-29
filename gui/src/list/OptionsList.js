@@ -4,7 +4,7 @@ function OptionsList() {
 
 
     return(
-        <Nav fill variant="tabs" defaultActiveKey="/">
+        <Nav id='upper_tub' fill variant="tabs" defaultActiveKey="/" className='fixed-top bg-dark navbar-dark'>
         <Nav.Item>
           <Nav.Link eventKey="disabled" disabled>Hello UserFullName</Nav.Link>
         </Nav.Item>

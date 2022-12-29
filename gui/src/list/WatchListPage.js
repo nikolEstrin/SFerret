@@ -4,10 +4,10 @@ function WatchListPage() {
 
     return(
         <div>
-            <div className="row-4">
+            <div>
                 <OptionsList/>
             </div>
-            <div className="row-8">
+            <div>
                 <h1>WatchList</h1>
             </div>
         </div>

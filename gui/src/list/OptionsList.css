@@ -1,12 +1,4 @@
-.List {
-    height: 100vh;
-    width: 30%;
-    background-color: aqua;
-}
 
-.TheContent {
-    left: 30%;
-    background-color: blueviolet;
-    transform: translate(30%, 0%);
-
+#upper_tub {
+    
 }

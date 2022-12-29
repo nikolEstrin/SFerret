@@ -4,10 +4,10 @@ function SearchPage() {
 
     return (
         <div>
-            <div className="col-4">
+            <div>
                 <OptionsList/>
             </div>
-            <div className="col-8">
+            <div>
                 <h1>Search</h1>
             </div>
         </div>

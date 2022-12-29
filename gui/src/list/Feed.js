@@ -4,16 +4,13 @@ function Feed() {
 
 
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col-4">
-                    <OptionsList/>
-                </div>
-                <div className="col-8">
-                    <h1>Feed</h1>
-                </div>
+        <div>
+            <div>
+                <OptionsList/>
             </div>
-            
+            <div>
+                <h1>Feed</h1>
+            </div>
         </div>
     );
 }
