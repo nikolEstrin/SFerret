@@ -1,4 +1,6 @@
 import OptionsList from "./OptionsList";
+import "./OptionsList.css";
+
 function SearchPage() {
 
 

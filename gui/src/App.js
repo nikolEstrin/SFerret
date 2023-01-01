@@ -5,6 +5,7 @@ import OptionsList from './list/OptionsList';
 import Feed from './list/Feed';
 import WatchListPage from './list/WatchListPage';
 import SearchPage from './list/SearchPage';
+import movies from './list/movies';
 
 function App() {
   return (
