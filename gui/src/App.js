@@ -2,7 +2,7 @@ import './App.css';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Login from './login/Login';
 import OptionsList from './list/OptionsList';
-import Feed from './list/Feed';
+import Feed from './Feed/Feed';
 import WatchListPage from './list/WatchListPage';
 import SearchPage from './list/SearchPage';
 import movies from './list/movies';

@@ -1,5 +1,4 @@
-import OptionsList from "./OptionsList";
-import "./OptionsList.css"
+import OptionsList from "../list/OptionsList";
 function Feed() {
 
 

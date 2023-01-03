@@ -1,84 +1,8 @@
-
-.body {
-    padding-top:60px;
+.link {
+    color: red;
+    
 }
 
-.oneMovie{
-    display: flex;
-    padding-left: 60px;
-    padding-top: 30px;
-}
-
-.container {
-    width: 4%;
-  }
-  
-  /* Make the image responsive */
-  .container img {
-    width: 100%;
-    height: auto;
-  }
-  
-  /* Style the button and place it in the middle of the container/image */
-  .container .btn {
-    position: absolute;
-    top: 50%;
-    transform: translate(-150%, -50%);
-    background-color: transparent;
-    border-radius: 0%;
-    border-color: transparent;
-  }
-
-  * {
-	box-sizing: border-box;
-}
-
-body {
-	font-family: "Open Sans", sans-serif;
-	margin: 0;
-	padding: 1rem;
-}
-
-h1, dl {
-	margin: 0;
-}
-
-article {
-	max-width: 70rem;
-	margin: 0 auto;
-	border: 0.18rem solid lightgrey;
-    background-color: rgb(39, 36, 36);
-	padding: clamp(1rem, 2vw, 3rem);
-	border-radius: 0.5rem;
-}
-
-article > * + * {
-	margin-top: 1rem;
-}
-
-dl {
-	display: grid;
-	grid-template-columns: auto 1fr;
-	gap: 0.5rem 0;
-}
-
-dl > * {
-	background: rgb(253, 56, 56);
-	padding: 1rem;
-}
-
-dl > :nth-of-type(2n) {
-	background: rgb(255, 255, 255);
-}
-
-dt {
-	font-weight: 700;
-	font-size: 1.3rem;
-}
-
-dd {
-	margin: 0;
-	padding: 1rem;
-	display: flex;
-	align-items: center;
+.link:hover {
+    color: white;
 }
