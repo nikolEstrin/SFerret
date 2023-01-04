@@ -58,7 +58,7 @@ dd {
 .container {
     position: relative;
     z-index: 100;
-    width: 12%;
+    width: 20%;
     transform: translate(50%, -35%);
   }
   

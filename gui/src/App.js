@@ -3,8 +3,8 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Login from './login/Login';
 import OptionsList from './list/OptionsList';
 import Feed from './Feed/Feed';
-import WatchListPage from './list/WatchListPage';
-import SearchPage from './list/SearchPage';
+import WatchListPage from './WatchList/WatchListPage';
+import SearchPage from './Search/SearchPage';
 import movies from './list/movies';
 
 function App() {

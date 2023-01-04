@@ -1,7 +1,7 @@
-import OptionsList from "./OptionsList";
-import "./OptionsList.css";
+import OptionsList from "../list/OptionsList";
+import "../list/OptionsList.css";
 import MovieItem from "./MovieItem";
-import movies from "./movies";
+import movies from "../list/movies";
 import "./WatchListPage.css"
 function WatchListPage() {
     const moviesList = movies.map((movie,key)=>{    
