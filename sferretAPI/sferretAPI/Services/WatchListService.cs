@@ -1,8 +1,7 @@
-﻿using Dapper;
-using sferretAPI.Models;
+﻿using sferretAPI.Models;
 using sferretAPI.Services.IServices;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace sferretAPI.Services
 {
@@ -20,18 +19,47 @@ namespace sferretAPI.Services
         {
             try
             {
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbWl = await con.QueryAsync<WatchList>("SELECT * FROM WatchList WHERE UserId = @UserId AND MovieId = @MovieId", new { UserId = userId, MovieId = movieId });
-                    if (dbWl == null || dbWl.Count() == 0)
+                    string getMovieSql = "SELECT * FROM WatchList WHERE UserId = @UserId AND MovieId = @MovieId";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
-                        string addToListSql = @"INSERT INTO WatchList (UserId, MovieId)
-                        OUTPUT INSERTED.[Id]
-                        VALUES(@UserId, @MovieId)";
-                        int id = await con.QuerySingleAsync<int>(addToListSql, new { UserId = userId, MovieId = movieId });
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = movieId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                                throw new Exception("user already added this movie to his list");
+                        }
+                    }
+                    string addToListSql = @"INSERT INTO WatchList (UserId, MovieId)
+                            VALUES(@UserId, @MovieId)";
+
+                    using (MySqlCommand command1 = new MySqlCommand(addToListSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command1.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = movieId;
+                        command1.Parameters.Add(param);
+                        using (MySqlDataReader reader1 = command1.ExecuteReader())
+                        {
+                            while (reader1.Read())
+                            {
+                                continue;
+                            }
+                        }
                     }
                     return await Get(userId);
                 }
@@ -46,16 +74,31 @@ namespace sferretAPI.Services
         {
             try
             {
-                List<Movie> wl = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                List<WatchList> wl = new List<WatchList>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getListSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
-                    var movies = await con.QueryAsync<WatchList>(getListSql, new { Id = userId });
-                    if (movies != null && movies.Any())
-                        wl = await ConvertMovies(movies, "none", true);
-                    return wl;
+                    string getMovieSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                WatchList wlItem = new WatchList();
+                                wlItem.Id = reader.GetInt32("Id");
+                                wlItem.UserId = reader.GetInt32("UserId");
+                                wlItem.MovieId = reader.GetInt32("MovieId");
+                                wl.Add(wlItem);
+                            }
+                        }
+                    }
+                    return await ConvertMovies(wl, "none", true);
                 }
             }
             catch (Exception ex)
@@ -68,16 +111,31 @@ namespace sferretAPI.Services
         {
             try
             {
-                List<Movie> wl = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                List<WatchList> wl = new List<WatchList>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getListSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
-                    var movies = await con.QueryAsync<WatchList>(getListSql, new { Id = userId });
-                    if (movies != null && movies.Any())
-                        wl = await ConvertMovies(movies, "AB", order);
-                    return wl;
+                    string getMovieSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                WatchList wlItem = new WatchList();
+                                wlItem.Id = reader.GetInt32("Id");
+                                wlItem.UserId = reader.GetInt32("UserId");
+                                wlItem.MovieId = reader.GetInt32("MovieId");
+                                wl.Add(wlItem);
+                            }
+                        }
+                    }
+                    return await ConvertMovies(wl, "AB", order);
                 }
             }
             catch (Exception ex)
@@ -90,16 +148,31 @@ namespace sferretAPI.Services
         {
             try
             {
-                List<Movie> wl = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                List<WatchList> wl = new List<WatchList>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getListSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
-                    var movies = await con.QueryAsync<WatchList>(getListSql, new { Id = userId });
-                    if (movies != null && movies.Any())
-                        wl = await ConvertMovies(movies, "RD", order);
-                    return wl;
+                    string getMovieSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                WatchList wlItem = new WatchList();
+                                wlItem.Id = reader.GetInt32("Id");
+                                wlItem.UserId = reader.GetInt32("UserId");
+                                wlItem.MovieId = reader.GetInt32("MovieId");
+                                wl.Add(wlItem);
+                            }
+                        }
+                    }
+                    return await ConvertMovies(wl, "RD", order);
                 }
             }
             catch(Exception ex)
@@ -112,16 +185,31 @@ namespace sferretAPI.Services
         {
             try
             {
-                List<Movie> wl = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                List<WatchList> wl = new List<WatchList>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getListSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
-                    var movies = await con.QueryAsync<WatchList>(getListSql, new { Id = userId });
-                    if (movies != null && movies.Any())
-                        wl = await ConvertMovies(movies, "RT", order);
-                    return wl;
+                    string getMovieSql = "SELECT * FROM WatchList WHERE UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                WatchList wlItem = new WatchList();
+                                wlItem.Id = reader.GetInt32("Id");
+                                wlItem.UserId = reader.GetInt32("UserId");
+                                wlItem.MovieId = reader.GetInt32("MovieId");
+                                wl.Add(wlItem);
+                            }
+                        }
+                    }
+                    return await ConvertMovies(wl, "RT", order);
                 }
             }
             catch (Exception ex)
@@ -134,14 +222,30 @@ namespace sferretAPI.Services
         {
             try
             {
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string removeFromListSql = @"DELETE FROM WatchList WHERE UserId = @UserId AND MovieId = @MovieId";
-                    await con.QuerySingleAsync(removeFromListSql, new { UserId = userId, MovieId = movieId });
-                    return await Get(userId);
+                    string getMovieSql = "DELETE FROM WatchList WHERE UserId = @UserId AND MovieId = @MovieId";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = movieId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                                throw new Exception("Delete Error");
+                        }
+                    }
                 }
+
+                return await Get(userId);
             }
             catch (Exception ex)
             {

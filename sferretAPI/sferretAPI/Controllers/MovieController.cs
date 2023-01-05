@@ -27,15 +27,6 @@ namespace sferretAPI.Controllers
             return Ok(movie);
         }
 
-        //[HttpGet("{name}")]
-        //public async Task<IActionResult> Get(string name)
-        //{
-        //    var movie = await _movieService.Get(name);
-        //    if (movie == null)
-        //        return NotFound();
-        //    return Ok(movie);
-        //}
-
         [Route("/Movies")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -72,7 +63,7 @@ namespace sferretAPI.Controllers
             return Ok(list);
         }
 
-        [HttpGet("Time/{time}/Flag/{flag}")]
+        [HttpGet("Time/{runtime}/Flag/{flag}")]
         public async Task<IActionResult> GetByRuntime(int runtime, int flag)
         {
             var list = await _movieService.GetByRuntime(runtime, flag);

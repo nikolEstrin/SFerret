@@ -1627,11 +1627,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\nikolEstrin\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
       "projectName": "sferretAPI",
-      "projectPath": "C:\\Users\\User\\source\\repos\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
+      "projectPath": "C:\\Users\\User\\source\\repos\\nikolEstrin\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\source\\repos\\sferretAPI\\sferretAPI\\obj\\",
+      "outputPath": "C:\\Users\\User\\source\\repos\\nikolEstrin\\SFerret\\sferretAPI\\sferretAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",

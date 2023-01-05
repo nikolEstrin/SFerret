@@ -21,19 +21,15 @@ namespace sferretAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Post post)
         {
-            var result = await _postService.Create(post);
-            if (result == null)
-                return BadRequest();
-            return Ok(result);
+            await _postService.Create(post);
+            return Ok();
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(Post post)
         {
-            var result = await _postService.Update(post);
-            if (result == null)
-                return BadRequest();
-            return Ok(result);
+            await _postService.Update(post);
+            return Ok();
         }
 
         [HttpDelete]
@@ -55,6 +51,8 @@ namespace sferretAPI.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var post = await _postService.Get(id);
+            if (post == null)
+                return NotFound();
             return Ok(post);
         }
 
@@ -62,6 +60,8 @@ namespace sferretAPI.Controllers
         public async Task<IActionResult> Get(int movieId, int userId)
         {
             var post = await _postService.Get(movieId, userId);
+            if (post == null)
+                return NotFound();
             return Ok(post);
         }
 

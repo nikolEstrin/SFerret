@@ -10,12 +10,6 @@ namespace sferretAPI.Services.IServices
         /// <param name="id">Movie's id</param>
         /// <returns>Movie object</returns>
         public Task<Movie> Get(int id);
-        /// <summary>
-        /// Get movie by name
-        /// </summary>
-        /// <param name="name">Movie's name</param>
-        /// <returns>Movie object</returns>
-        public Task<Movie> Get(string name);
 
         /// <summary>
         /// Retrive all movies from DB

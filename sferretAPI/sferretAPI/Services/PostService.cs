@@ -1,8 +1,8 @@
-﻿using Dapper;
+﻿using MySql.Data.MySqlClient;
 using sferretAPI.Models;
 using sferretAPI.Services.IServices;
 using System.Data;
-using System.Data.SqlClient;
+
 
 namespace sferretAPI.Services
 {
@@ -14,37 +14,64 @@ namespace sferretAPI.Services
             _connectionstring = configuration.GetConnectionString("SFerretDB");
         }
 
-        public async Task<Post> Create(Post post)
+        public async Task Create(Post post)
         {
             try
             {
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbPost = await con.QueryAsync<Post>("SELECT * FROM Post WHERE MovieId = @MovieId AND UserId = @UserId", new { MovieId = post.MovieId, UserId = post.UserId });
-                    if (dbPost != null)
-                        throw new Exception(String.Format("User {0} already created a post about Movie {1}", post.UserId, post.MovieId));
-
-                    string addPostSql = @"INSERT INTO Post (UserId, MovieId, Rating, Comment, PublishedDate)
-                    OUTPUT INSERTED.[Id]
-                    VALUES(@UserId, @MovieId, @Rating, @Comment, @PublishedDate)";
-                    int id = await con.QuerySingleAsync<int>(addPostSql,
-                        new
-                        {
-                            UserId = post.UserId,
-                            MovieId = post.MovieId,
-                            Rating = post.Rating,
-                            Comment = post.Comment,
-                            PublishedDate = DateTime.Now
-                        });
-                    if (id > 0)
+                    string getPostSql = @"SELECT * FROM Post WHERE MovieId = @MovieId AND UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
                     {
-                        post.Id = id;
-                        return post;
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = post.MovieId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = post.UserId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                                throw new Exception("user already post about this movie");
+                        }
                     }
-                    return null;
+                    string addPostSql = @"INSERT INTO Post (UserId, MovieId, Rating, Comment, PublishedDate)
+                            VALUES(@UserId, @MovieId, @Rating, @Comment, @PublishedDate)";
+
+                    using (MySqlCommand command1 = new MySqlCommand(addPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = post.MovieId;
+                        command1.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = post.UserId;
+                        command1.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@Rating";
+                        param.Value = post.Rating;
+                        command1.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@Comment";
+                        param.Value = post.Comment;
+                        command1.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@PublishedDate";
+                        param.Value = post.PublishedDate;
+                        command1.Parameters.Add(param);
+                        using (MySqlDataReader reader1 = command1.ExecuteReader())
+                        {
+                            while (reader1.Read())
+                            {
+                                continue;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -53,36 +80,64 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<Post> Update(Post post)
+        public async Task Update(Post post)
         {
             try
             {
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbPost = await con.QueryAsync<Post>("SELECT * FROM Post WHERE MovieId = @MovieId AND UserId = @UserId", new
+                    string getPostSql = @"SELECT * FROM Post WHERE MovieId = @MovieId AND UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
                     {
-                        UserId = post.UserId,
-                        MovieId = post.MovieId
-                    });
-                    if (dbPost == null)
-                        throw new Exception(String.Format("User {0} didnt wrote a post about Movie {1}", post.UserId, post.MovieId));
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = post.MovieId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = post.UserId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                                throw new Exception("user didnt post about this movie");
+                        }
+                    }
+                    string addPostSql = @"UPDATE Post SET Rating= @Rating, Comment = @Comment, PublishedDate = @PublishedDate 
+                            WHERE MovieId = @MovieId AND UserId = @UserId";
 
-                    string updatePostSql = @"UPDATE Post SET Rating= @Rating, Comment = @Comment, PublishedDate = @PublishedDate 
-                    WHERE MovieId = @MovieId AND UserId = @UserId";
-                    var updateValues = new
+                    using (MySqlCommand command = new MySqlCommand(addPostSql, con))
                     {
-                        UserId = post.UserId,
-                        MovieId = post.MovieId,
-                        Rating = post.Rating,
-                        Comment = post.Comment,
-                        PublishedDate = DateTime.Now
-                    };
-                    var result = await con.QueryAsync(updatePostSql, updateValues);
-                    Post post1 = await GetByIds(post.MovieId, post.UserId, con);
-                    return post1;
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = post.MovieId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = post.UserId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@Rating";
+                        param.Value = post.Rating;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@Comment";
+                        param.Value = post.Comment;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@PublishedDate";
+                        param.Value = post.PublishedDate;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader1 = command.ExecuteReader())
+                        {
+                            while (reader1.Read())
+                            {
+                                continue;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -95,11 +150,27 @@ namespace sferretAPI.Services
         {
             try
             {
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    await con.QuerySingleAsync("DELETE FROM Post WHERE MovieId = @MovieId AND UserId = @UserId", new { MovieId = movieId, UserId = userId });
+                    string getPostSql = "DELETE FROM Post WHERE MovieId = @MovieId AND UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = movieId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                                throw new Exception("Delete Error");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -113,16 +184,34 @@ namespace sferretAPI.Services
             try
             {
                 Post post = null;
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getPostSql = "SELECT * FROM Post WHERE Id = @Id";
-                    var posts = await con.QueryAsync<Post>(getPostSql, new { Id = id });
-                    if (posts != null && posts.Any())
-                        post = posts.FirstOrDefault();
-                    return post;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Id";
+                        param.Value = id;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while(reader.Read())
+                            {
+                                post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                            }
+                        }
+                    }
                 }
+                return post;
+
             }
             catch (Exception ex)
             {
@@ -132,27 +221,48 @@ namespace sferretAPI.Services
 
         public async Task<Post> Get(int movieId, int userId)
         {
+
+            //var dbUser = await con.QueryAsync<User>("SELECT * FROM User WHERE Id = @Id", new { Id = userId });
+            //if (dbUser == null)
+            //    throw new Exception("No such user " + userId);
+            //var dbMovie = await con.QueryAsync<Movie>("SELECT * FROM Movie WHERE Id = @Id", new { Id = movieId });
+            //if (dbMovie == null)
+            //    throw new Exception("No such movie " + movieId);
+
             try
             {
                 Post post = null;
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbUser = await con.QueryAsync<User>("SELECT * FROM User WHERE Id = @Id", new {Id = userId});
-                    if (dbUser == null)
-                        throw new Exception("No such user " + userId);
-                    var dbMovie = await con.QueryAsync<Movie>("SELECT * FROM Movie WHERE Id = @Id", new { Id = movieId });
-                    if (dbMovie == null)
-                        throw new Exception("No such movie " + movieId);
-
                     string getPostSql = "SELECT * FROM Post WHERE MovieId = @MovieId AND UserId = @UserId";
-                    var posts = await con.QueryAsync<Post>(getPostSql, new { MovieId = movieId, UserId = userId });
-                    if (posts != null && posts.Any())
-                        post = posts.FirstOrDefault();
-                    return post;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = movieId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                            }
+                        }
+                    }
                 }
+                return post;
             }
             catch (Exception ex)
             {
@@ -165,16 +275,30 @@ namespace sferretAPI.Services
             try
             {
                 List<Post> posts = new List<Post>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getPostSql = "SELECT * FROM Post ORDER BY MovieId";
-                    var posts1 = await con.QueryAsync<Post>(getPostSql);
-                    if (posts1 != null && posts1.Any())
-                        posts = posts1.ToList();
-                    return posts;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Post post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                                posts.Add(post);
+                            }
+                        }
+                    }
                 }
+                return posts;
             }
             catch (Exception ex)
             {
@@ -184,26 +308,44 @@ namespace sferretAPI.Services
 
         public async Task<List<Post>> GetByGenre(string genre)
         {
+
+            //var dbGenre = await con.QueryAsync<Genre>("SELECT * FROM Genre WHERE Name = @Name", new { Name = genre });
+            //if (dbGenre == null)
+            //    throw new Exception("No such genre " + genre);
+
             try
             {
                 List<Post> posts = new List<Post>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbGenre = await con.QueryAsync<Genre>("SELECT * FROM Genre WHERE Name = @Name", new { Name = genre });
-                    if (dbGenre == null)
-                        throw new Exception("No such genre " + genre);
-
                     string getPostSql = @"SELECT Post.* FROM Post, MovieGenre, Genre
-                    WHERE Post.MovieId = MovieGenre.MovieId AND MovieGenre.GenreId = Genre.Id AND Genre.Name = @Genre
+                    WHERE Post.MovieId = MovieGenre.MovieId AND MovieGenre.GenreId = Genre.Id AND Genre.GenreName = @Genre
                     ORDER BY Post.MovieId";
-                    var posts1 = await con.QueryAsync<Post>(getPostSql, new { Genre = genre });
-                    if (posts1 != null && posts1.Any())
-                        posts = posts1.ToList();
-                    return posts;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Genre";
+                        param.Value = genre;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Post post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                                posts.Add(post);
+                            }
+                        }
+                    }
                 }
+                return posts;
             }
             catch (Exception ex)
             {
@@ -216,19 +358,34 @@ namespace sferretAPI.Services
             try
             {
                 List<Post> posts = new List<Post>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbMovie = await con.QueryAsync<Movie>("SELECT * FROM Movie WHERE Id = @Id", new { Id = movieId });
-
                     string getPostSql = "SELECT * FROM Post WHERE MovieId = @MovieId";
-                    var posts1 = await con.QueryAsync<Post>(getPostSql, new { MovieId = movieId });
-                    if (posts1 != null && posts1.Any())
-                        posts = posts1.ToList();
-                    return posts;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@MovieId";
+                        param.Value = movieId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Post post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                                posts.Add(post);
+                            }
+                        }
+                    }
                 }
+                return posts;
             }
             catch (Exception ex)
             {
@@ -241,11 +398,10 @@ namespace sferretAPI.Services
             try
             {
                 List<Post> posts = new List<Post>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
                     string getPostSql = "";
                     if (flag == 1) // GREATER THAN
                         getPostSql = @"SELECT * FROM Post WHERE Rating > @Rating ORDER BY MovieId";
@@ -253,11 +409,29 @@ namespace sferretAPI.Services
                         getPostSql = @"SELECT * FROM Post WHERE Rating = @Rating ORDER BY MovieId";
                     else if (flag == -1) // LESS THAN
                         getPostSql = @"SELECT * FROM Post WHERE Rating < @Rating ORDER BY MovieId";
-                    var posts1 = await con.QueryAsync<Post>(getPostSql, new { Rating = rating });
-                    if (posts1 != null && posts1.Any())
-                        posts = posts1.ToList();
-                    return posts;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Rating";
+                        param.Value = rating;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Post post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                                posts.Add(post);
+                            }
+                        }
+                    }
                 }
+                return posts;
             }
             catch (Exception ex)
             {
@@ -270,45 +444,39 @@ namespace sferretAPI.Services
             try
             {
                 List<Post> posts = new List<Post>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getPostSql = "SELECT * FROM Post WHERE UserId = @UserId";
-                    var posts1 = await con.QueryAsync<Post>(getPostSql, new { UserId = userId });
-                    if (posts1 != null && posts1.Any())
-                        posts = posts1.ToList();
-                    return posts;
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Post post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                                posts.Add(post);
+                            }
+                        }
+                    }
                 }
+                return posts;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-        /// <summary>
-        /// Get post by movie's and user's ids
-        /// </summary>
-        /// <param name="movieId">Movie's id</param>
-        /// <param name="userId">User's id</param>
-        /// <param name="con">DbConnection object</param>
-        /// <returns>Post object</returns>
-        private async Task<Post> GetByIds(int movieId, int userId, IDbConnection con)
-        {
-            try
-            {
-                Post post = null;
-                var posts = await con.QueryAsync<Post>("SELECT * FROM Post WHERE MovieId = @MovieId AND UserId = @UserId", new { MovieId = movieId, UserId = userId });
-                if (posts != null && posts.Any())
-                    post = posts.FirstOrDefault();
-                return post;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
     }
 }
