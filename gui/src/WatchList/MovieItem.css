@@ -1,0 +1,93 @@
+body {
+	font-family: "Open Sans", sans-serif;
+	margin: 0;
+	padding: 1rem;
+}
+
+h1, dl {
+	margin: 0;
+}
+
+article {
+	max-width: 70rem;
+	margin: 0 auto;
+	border: 0.18rem solid lightgrey;
+    background-color: rgb(39, 36, 36);
+	padding: clamp(1rem, 2vw, 3rem);
+	border-radius: 0.5rem;
+    height: 92vh;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+article > * + * {
+	margin-top: 1rem;
+}
+
+dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 0.5rem 0;
+}
+
+dl > * {
+	background: rgb(253, 56, 56);
+	padding: 1rem;
+    grid-column-end: span 2;
+}
+
+dl > :nth-of-type(2n) {
+	background: rgb(255, 255, 255);
+    grid-column-end: span 2;
+}
+
+dt {
+	font-weight: 700;
+	font-size: 2rem;
+    transform: translate(0%, 155%);
+}
+
+dd {
+	margin: 0;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+    margin-left: 300px;
+}
+
+.container {
+    position: relative;
+    z-index: 100;
+    width: 20%;
+    transform: translate(50%, -35%);
+  }
+  
+  /* Make the image responsive */
+  .container img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Style the button and place it in the middle of the container/image */
+  .container .btn {
+    position: absolute;
+    top: 50%;
+    /* transform: translate(-150%, -50%); */
+    background-color: transparent;
+    border-radius: 0%;
+    border-color: transparent;
+  }
+
+  * {
+	box-sizing: border-box;
+}
+
+.watched {
+    width: 20%;
+}
+
+.add_post {
+    width: 32%;
+    margin-right: 85px !important;
+    margin-top: 20px !important;
+}

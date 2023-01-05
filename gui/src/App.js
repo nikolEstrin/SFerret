@@ -1,15 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Login from './login/Login';
+import OptionsList from './list/OptionsList';
+import Feed from './Feed/Feed';
+import WatchListPage from './WatchList/WatchListPage';
+import SearchPage from './Search/SearchPage';
+import movies from './list/movies';
 
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={() => <Login/>} />
-        <Route exact path="/login" component={() => <Login/>} />
-      </Switch>
+      <Routes>
+        <Route exact path='/' element={<OptionsList/>} />
+        <Route exact path='/login' element={<Login/>} />
+        <Route exact path='/feed' element={<Feed/>} />
+        <Route exact path='/watchlist' element={<WatchListPage/>} />
+        <Route exact path='/search' element={<SearchPage/>} />
+
+
+      </Routes>
     </Router>
   );
 }
