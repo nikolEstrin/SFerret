@@ -13,7 +13,7 @@ function MovieSearchResultItem({title, overview}) {
                         <button type="button" className="btn btn-secondary"/>
                     </div>
                 </OverlayTrigger>
-                <div className="container">
+                <div className="containerdd">
                     <img src="Images/addPost.png" alt="Snow"/>
                     <button type="button" className="btn btn-secondary"/>
                 </div>
