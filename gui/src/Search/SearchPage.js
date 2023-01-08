@@ -25,7 +25,22 @@ function SearchPage() {
                         <label htmlFor="search">Search</label>
                         <input id="search" type="search" pattern=".*\S.*" required/>
                         <span className="caret"></span>
+                        {/*} <ul class="list-group filter">
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched"/>
+                                <label class="form-check-label stretched-link" for="firstCheckboxStretched">First checkbox</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched"/>
+                                <label class="form-check-label stretched-link" for="secondCheckboxStretched">Second checkbox</label>
+                            </li>
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched"/>
+                                <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Third checkbox</label>
+                            </li>
+                        </ul>*/}
                     </form>
+                    
                     <dl className="searchDesign">
                     {moviesList}        
                     </dl>
