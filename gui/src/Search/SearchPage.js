@@ -25,20 +25,25 @@ function SearchPage() {
                         <label htmlFor="search">Search</label>
                         <input id="search" type="search" pattern=".*\S.*" required/>
                         <span className="caret"></span>
-                        {/*} <ul class="list-group filter">
-                            <li class="list-group-item">
+                        <span class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle filter" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown button
+                        </button>
+                        <ul class="list-group filter dropdown-menu">
+                            <li class="list-group-item dropdown-item">
                                 <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched"/>
-                                <label class="form-check-label stretched-link" for="firstCheckboxStretched">First checkbox</label>
+                                <label class="form-check-label stretched-link" id="firstCheckboxStretched1" for="firstCheckboxStretched">Movie-Name</label>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item dropdown-item">
                                 <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched"/>
-                                <label class="form-check-label stretched-link" for="secondCheckboxStretched">Second checkbox</label>
+                                <label class="form-check-label stretched-link" for="secondCheckboxStretched">User</label>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item dropdown-item">
                                 <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched"/>
-                                <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Third checkbox</label>
+                                <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Date</label>
                             </li>
-                        </ul>*/}
+                        </ul>
+                        </span>
                     </form>
                     
                     <dl className="searchDesign">

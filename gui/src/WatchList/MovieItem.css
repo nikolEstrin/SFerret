@@ -82,7 +82,7 @@ dd {
 
   .container button:hover {
 	background-color: transparent;
-	/* border-color: transparent; */
+	border-color: transparent;
   }
 
   .container button.postAdd {

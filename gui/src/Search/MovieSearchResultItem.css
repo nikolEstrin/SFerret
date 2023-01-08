@@ -77,7 +77,7 @@ dd.searchDesign{
 
   .containerdd button:hover {
 	background-color: transparent;
-	/* border-color: transparent; */
+	border-color: transparent;
   }
 
   .containerdd button.post {
