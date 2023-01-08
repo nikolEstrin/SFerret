@@ -10,6 +10,6 @@
         public string Overview { get; set; }
         public string PosterPath { get; set; }
         public int Runtime { get; set; }
-        public DateOnly ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
     }
 }

@@ -1,8 +1,7 @@
-﻿using Dapper;
+﻿using MySql.Data.MySqlClient;
 using sferretAPI.Models;
 using sferretAPI.Services.IServices;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace sferretAPI.Services
 {
@@ -20,36 +19,34 @@ namespace sferretAPI.Services
             try
             {
                 Movie movie = null;
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getMovieSql = "SELECT * FROM Movie WHERE Id = @Id";
-                    var movies = await con.QueryAsync<Movie>(getMovieSql, new { Id = id });
-                    if (movies != null && movies.Any())
-                        movie = movies.FirstOrDefault();
-                    return movie;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<Movie> Get(string name)
-        {
-            try
-            {
-                Movie movie = null;
-                using (IDbConnection con = new SqlConnection(_connectionstring))
-                {
-                    if (con.State != ConnectionState.Open)
-                        con.Open();
-                    string getMovieSql = "SELECT * FROM Movie WHERE Title = @Name";
-                    var movies = await con.QueryAsync<Movie>(getMovieSql, new { Name = name });
-                    if (movies != null && movies.Any())
-                        movie = movies.FirstOrDefault();
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Id";
+                        param.Value = id;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                            }
+                        }
+                    }
                     return movie;
                 }
             }
@@ -63,16 +60,33 @@ namespace sferretAPI.Services
         {
             try
             {
-                List<Movie> movie = null;
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                List<Movie> movies = new List<Movie>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getMovieSql = "SELECT * FROM Movie";
-                    var movies = await con.QueryAsync<Movie>(getMovieSql);
-                    if (movies != null && movies.Any())
-                        movie = movies.ToList();
-                    return movie;
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
+                    return movies;
                 }
             }
             catch (Exception ex)
@@ -86,14 +100,35 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "SELECT * FROM Movie WHERE Collection LIKE '%@Collection%'";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { Collection = collection });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    string getMovieSql = "SELECT * FROM Movie WHERE REGEXP_LIKE (Collection, @Collection)";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Collection";
+                        param.Value = collection;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -108,14 +143,35 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getMovieSql = "SELECT * FROM Movie WHERE Adult = @Adult";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { Adult = adult });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Adult";
+                        param.Value = adult;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -125,12 +181,14 @@ namespace sferretAPI.Services
             }
         }
 
+
+        //stupid date backwards
         public async Task<List<Movie>> GetByDate(DateTime date, int flag)
         {
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
@@ -141,9 +199,30 @@ namespace sferretAPI.Services
                         getMovieSql = "SELECT * FROM Movie WHERE DATEDIFF(ReleaseDate, @ReleaseDate) = 0";
                     else if (flag == -1)
                         getMovieSql = "SELECT * FROM Movie WHERE DATEDIFF(ReleaseDate, @ReleaseDate) <= 0";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { ReleaseDate = date });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@ReleaseDate";
+                        param.Value = date;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -158,18 +237,36 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-
-                    var dbGenre = await con.QueryAsync<Genre>("SELECT * FROM Genre WHERE Name = @Name", new { Name = genre });
-
                     string getMovieSql = @"SELECT Movie.* FROM Movie, MovieGenre, Genre
-                    WHERE Movie.Id = MovieGenre.MovieId AND MovieGenre.GenreId = Genre.Id AND Genre.Name = @Genre";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { Genre = genre });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    WHERE Movie.Id = MovieGenre.MovieId AND MovieGenre.GenreId = Genre.Id AND Genre.GenreName = @Genre";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Genre";
+                        param.Value = genre;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -184,14 +281,35 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getMovieSql = "SELECT * FROM Movie WHERE Language = @Lang";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { Lang = lang });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Lang";
+                        param.Value = lang;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -206,7 +324,7 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
@@ -214,17 +332,42 @@ namespace sferretAPI.Services
                     if (post) // Max num of posts
                         getMovieSql = @"SELECT *
                         FROM Movie
-                        WHERE (SELECT COUNT(movieID)
+                        WHERE (SELECT COUNT(MovieId)
                                 FROM Post
-                                WHERE Post.movieId=Movie.Id) = (SELECT MAX(c)
-                                                                FROM (SELECT COUNT(movieID) AS c
+                                WHERE Post.MovieId=Movie.Id) = (SELECT MAX(c)
+                                                                FROM (SELECT COUNT(MovieId) AS c
                                                                        FROM Post
-                                                                       GROUP BY movieID) AS countTable) ";
+                                                                       GROUP BY MovieId) AS countTable) ";
                     else //Min num of posts
-                        getMovieSql = @"";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql);
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                        getMovieSql = @"SELECT *
+                                        FROM Movie, ((SELECT MovieId AS ID, Count(*) as counter
+                                                    FROM Post
+                                                    GROUP BY MovieId) UNION ALL
+                                                    (SELECT Id AS ID, 0 AS counter
+                                                    FROM Movie
+                                                    Where Movie.Id NOT IN(SELECT distinct MovieId From Post))) AS a
+                                        WHERE Movie.Id=a.Id AND (SELECT MIN(counter)
+                                        FROM a)";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -239,7 +382,7 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
@@ -248,19 +391,47 @@ namespace sferretAPI.Services
                         getMovieSql = @"SELECT *
                         FROM Movie
                         Where (SELECT AVG(Post.Rating)
-                        FROM Post
-                        WHERE Post.movieID=Movie.ID) > x";
+                                FROM Post
+                                WHERE Post.MovieId=Movie.Id) > @X";
                     else if (flag == 0) // EQUAL TO
                         getMovieSql = @"SELECT *
                         FROM Movie
                         Where (SELECT AVG(Post.Rating)
                         FROM Post
-                        WHERE Post.movieID=Movie.ID) = x";
+                        WHERE Post.MovieId=Movie.Id) =@X";
                     else if (flag == -1) // LESS THAN
-                        getMovieSql = @""; 
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql); // ########  ADD VALUES HERE  ##########
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                        getMovieSql = @"SELECT Movie.*
+                                        FROM Movie, ((SELECT MovieId AS ID, AVG(Rating) As avg
+                                                    FROM Post
+                                                    GROUP BY MovieId) UNION ALL
+                                                    (SELECT Id AS ID , 0 AS avg
+                                                    FROM Movie
+                                                    WHERE Movie.Id NOT IN (SELECT distinct MovieId From Post))) AS a
+                                        WHERE Movie.Id = a.ID AND a.avg > @X";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@X";
+                        param.Value = rating;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -275,7 +446,7 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
@@ -286,9 +457,30 @@ namespace sferretAPI.Services
                         getMovieSql = "SELECT * FROM Movie WHERE Runtime = @Runtime";
                     else if (flag == -1)
                         getMovieSql = "SELECT * FROM Movie WHERE Runtime <= @Runtime";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { Runtime = runtime });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Runtime";
+                        param.Value = runtime;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }
@@ -303,14 +495,35 @@ namespace sferretAPI.Services
             try
             {
                 List<Movie> movies = new List<Movie>();
-                using (IDbConnection con = new SqlConnection(_connectionstring))
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "SELECT * FROM Movie WHERE Title LIKE '%@Title%'";
-                    var movies1 = await con.QueryAsync<Movie>(getMovieSql, new { Title = title });
-                    if (movies1 != null && movies1.Any())
-                        movies = movies1.ToList();
+                    string getMovieSql = "SELECT * FROM Movie WHERE REGEXP_LIKE (Title, @Title)";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Title";
+                        param.Value = title;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
                     return movies;
                 }
             }

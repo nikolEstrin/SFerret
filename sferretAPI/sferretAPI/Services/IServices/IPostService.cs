@@ -32,14 +32,14 @@ namespace sferretAPI.Services.IServices
         /// </summary>
         /// <param name="post">Post object with details to update</param>
         /// <returns>Post object with updated details</returns>
-        public Task<Post> Update(Post post);
+        public Task Update(Post post);
 
         /// <summary>
         /// Add new post to DB
         /// </summary>
         /// <param name="post">Post object to add</param>
         /// <returns>Post object</returns>
-        public Task<Post> Create(Post post);
+        public Task Create(Post post);
 
         /// <summary>
         /// Retrive all posts from DB
