@@ -69,13 +69,32 @@ dd {
   }
   
   /* Style the button and place it in the middle of the container/image */
-  .container .btn {
+  .container button {
     position: absolute;
     top: 50%;
-    /* transform: translate(-150%, -50%); */
+    width: 33%;
+    height: 70%;
+    transform: translate(-175%, -50%);
     background-color: transparent;
     border-radius: 0%;
     border-color: transparent;
+  }
+
+  .container button:hover {
+	background-color: transparent;
+	border-color: transparent;
+  }
+
+  .container button.postAdd {
+    width: 66%;
+    height: 62%;
+    transform: translate(-118%, -52%);
+  }
+
+  .container button.watched {
+    width: 42%;
+    height: 100%;
+    transform: translate(-148%, -50%);
   }
 
   * {
@@ -91,3 +110,4 @@ dd {
     margin-right: 85px !important;
     margin-top: 20px !important;
 }
+
