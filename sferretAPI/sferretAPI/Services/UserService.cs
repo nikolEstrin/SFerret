@@ -22,7 +22,7 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "SELECT * FROM [User] WHERE Id = @Id";
+                    string getMovieSql = "SELECT * FROM User WHERE Id = @Id";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
@@ -58,7 +58,7 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "SELECT * FROM [User] WHERE FullName = @Name";
+                    string getMovieSql = "SELECT * FROM User WHERE FullName = @Name";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
@@ -94,7 +94,7 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "SELECT * FROM [User] WHERE FullName = @Name";
+                    string getMovieSql = "SELECT * FROM User WHERE FullName = @Name";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
@@ -112,7 +112,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    if (user1.Password == user.Password)
+                    if (user1 != null && user1.Password == user.Password)
                         return user1.Id;
                     return null;
                 }
@@ -132,7 +132,7 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = @"INSERT INTO [User] (FullName, Password)
+                    string getMovieSql = @"INSERT INTO User (FullName, Password)
                     OUTPUT INSERTED.[Id]
                     VALUES(@FullName, @Password)";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))

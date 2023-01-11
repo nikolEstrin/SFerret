@@ -65,7 +65,7 @@ namespace sferretAPI.Controllers
             return Ok(post);
         }
 
-        [HttpGet("Rating/{rating}")]
+        [HttpGet("Rating/{rating}/Flag/{flag}")]
         public async Task<IActionResult> GetByRating(int rating, int flag)
         {
             var posts = await _postService.GetByRating(rating, flag);

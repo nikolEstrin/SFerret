@@ -15,35 +15,42 @@ namespace sferretAPI.Services.IServices
         /// Retrive all movies from DB
         /// </summary>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetAll();
+        public Task<List<Movie>> GetAll(int page);
+
+        /// <summary>
+        /// Retrive all movies from DB that given user didnt wrote post on
+        /// </summary>
+        /// <param name="id">User's id</param>
+        /// <returns>List of Movie objects</returns>
+        public Task<List<Movie>> GetAllNotWatched(int id, int page);
 
         /// <summary>
         /// Get all movies for adults/kids
         /// </summary>
         /// <param name="adult">Boolean value for adults or kids</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByAdult(bool adult);
+        public Task<List<Movie>> GetByAdult(bool adult, int page);
 
         /// <summary>
         /// Get all movies from a given collection
         /// </summary>
         /// <param name="collection">Collection's name</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByCollection(string collection);
+        public Task<List<Movie>> GetByCollection(string collection, int page);
 
         /// <summary>
         /// Get all movies in a given language
         /// </summary>
         /// <param name="lang">Languge</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByLanguage(string lang);
+        public Task<List<Movie>> GetByLanguage(string lang, int page);
 
         /// <summary>
         /// Get all movies that their title match given string
         /// </summary>
         /// <param name="title"(substring of) >Movie's title</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByTitle(string title);
+        public Task<List<Movie>> GetByTitle(string title, int page);
 
         /// <summary>
         /// Get all movies that are matching with given release date
@@ -54,7 +61,7 @@ namespace sferretAPI.Services.IServices
         /// <param name="date">DateTime object</param>
         /// <param name="flag">"Boolean" value</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByDate(DateTime date, int flag);
+        public Task<List<Movie>> GetByDate(DateTime date, int flag, int page);
 
         /// <summary>
         /// Get all movies that are matching with given runtime
@@ -65,14 +72,14 @@ namespace sferretAPI.Services.IServices
         /// <param name="runtime">Int runtime value</param>
         /// <param name="flag">"Boolean" value</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByRuntime(int runtime, int flag);
+        public Task<List<Movie>> GetByRuntime(int runtime, int flag, int page);
 
         /// <summary>
         /// Get all movies that are tagged as given genre
         /// </summary>
         /// <param name="genre">Genre's name</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByGenre(string genre);
+        public Task<List<Movie>> GetByGenre(string genre, int page);
 
         /// <summary>
         /// Get all movies that are matching with given rating
@@ -83,13 +90,13 @@ namespace sferretAPI.Services.IServices
         /// <param name="rating">Int value 1-5/10</param>
         /// <param name="flag">"Boolean" value</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByRating(int rating, int flag);
+        public Task<List<Movie>> GetByRating(int rating, int flag, int page);
 
         /// <summary>
         /// Get all movies with most/least posts about
         /// </summary>
         /// <param name="post">Boolean value, True for most and False for least</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByPost(bool post);
+        public Task<List<Movie>> GetByPost(bool post, int page);
     }
 }

@@ -56,7 +56,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetAll()
+        public async Task<List<Movie>> GetAll(int page)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -95,7 +95,46 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByCollection(string collection)
+        public async Task<List<Movie>> GetAllNotWatched(int id, int page)
+        {
+            try
+            {
+                List<Movie> movies = new List<Movie>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getMovieSql = "";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Movie movie = new Movie();
+                                movie.Id = reader.GetInt32("Id");
+                                movie.Title = reader.GetString("Title");
+                                movie.Adult = reader.GetBoolean("Adult");
+                                movie.ReleaseDate = reader.GetDateTime("ReleaseDate");
+                                movie.Runtime = reader.GetInt32("Runtime");
+                                movie.PosterPath = reader.GetString("PosterPath");
+                                movie.Overview = reader.GetString("Overview");
+                                movie.Language = reader.GetString("Language");
+                                movie.Collection = reader.GetString("Collection");
+                                movies.Add(movie);
+                            }
+                        }
+                    }
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Movie>> GetByCollection(string collection, int page)
         {
             try
             {
@@ -129,7 +168,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -138,7 +177,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByAdult(bool adult)
+        public async Task<List<Movie>> GetByAdult(bool adult, int page)
         {
             try
             {
@@ -172,7 +211,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -183,7 +222,7 @@ namespace sferretAPI.Services
 
 
         //stupid date backwards
-        public async Task<List<Movie>> GetByDate(DateTime date, int flag)
+        public async Task<List<Movie>> GetByDate(DateTime date, int flag, int page)
         {
             try
             {
@@ -223,7 +262,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -232,7 +271,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByGenre(string genre)
+        public async Task<List<Movie>> GetByGenre(string genre, int page)
         {
             try
             {
@@ -267,7 +306,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -276,7 +315,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByLanguage(string lang)
+        public async Task<List<Movie>> GetByLanguage(string lang, int page)
         {
             try
             {
@@ -310,7 +349,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -319,7 +358,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByPost(bool post)
+        public async Task<List<Movie>> GetByPost(bool post, int page)
         {
             try
             {
@@ -368,7 +407,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -377,7 +416,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByRating(int rating, int flag)
+        public async Task<List<Movie>> GetByRating(int rating, int flag, int page)
         {
             try
             {
@@ -432,7 +471,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -441,7 +480,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByRuntime(int runtime, int flag)
+        public async Task<List<Movie>> GetByRuntime(int runtime, int flag, int page)
         {
             try
             {
@@ -481,7 +520,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)
@@ -490,7 +529,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByTitle(string title)
+        public async Task<List<Movie>> GetByTitle(string title, int page)
         {
             try
             {
@@ -524,7 +563,7 @@ namespace sferretAPI.Services
                             }
                         }
                     }
-                    return movies;
+                    return movies.Skip((page - 1) * 50).Take(50).ToList();
                 }
             }
             catch (Exception ex)

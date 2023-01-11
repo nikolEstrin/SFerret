@@ -62,7 +62,7 @@ namespace sferretAPI.Services
                         command1.Parameters.Add(param);
                         param = new MySqlParameter();
                         param.ParameterName = "@PublishedDate";
-                        param.Value = post.PublishedDate;
+                        param.Value = DateTime.Now;
                         command1.Parameters.Add(param);
                         using (MySqlDataReader reader1 = command1.ExecuteReader())
                         {
@@ -128,7 +128,7 @@ namespace sferretAPI.Services
                         command.Parameters.Add(param);
                         param = new MySqlParameter();
                         param.ParameterName = "@PublishedDate";
-                        param.Value = post.PublishedDate;
+                        param.Value = DateTime.Now;
                         command.Parameters.Add(param);
                         using (MySqlDataReader reader1 = command.ExecuteReader())
                         {
