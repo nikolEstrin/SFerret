@@ -12,14 +12,27 @@ function Feed() {
             <div>
                 <OptionsList/>
             </div>
-            <div>
-                <br/>
-                <center>
-                    <h1>Feed</h1>
-                    <br/>
-                    {moviesList}
-                </center>
-            </div>
+
+                <div className="row">
+                    <div className="col-9">
+                        <br/>
+                        <div>
+                            <center>
+                                <h1>Feed</h1>
+                                <br/>
+                                {moviesList}
+                            </center>
+                        </div>
+                    </div>
+                    <div className="col-3">
+                        <form>
+                            <label htmlFor="search">Search</label>
+                            <input id="search" type="search" pattern=".*\S.*" required/>
+                            <span className="caret"></span>
+                        </form>
+                    </div>
+                </div>
+
         </div>
     );
 }

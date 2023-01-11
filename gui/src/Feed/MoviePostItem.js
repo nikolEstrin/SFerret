@@ -9,18 +9,28 @@ function MoviePostItem({title, overview, index}){
         });
     
         return(
-            <div>
+            <div className="postBlock">
                 <h1>{title}</h1>
                 <p>{overview}</p>
-                <div className="overflow-auto">
-                    {postsList}
+                <center>
+                    <div className="listComments overflow-auto">
+                        {postsList}
+                    </div>
+                </center>
+                <div className="containerPost addP">
+                    <img src="Images/addPost.png" alt="Snow"/>
+                    <button type="button" className="btn btn-secondary post"/>
+                </div>
+                <div className="containerPost addW">
+                    <img src="Images/addToWatchListButton.png" alt="Snow"/>
+                    <button type="button" className="btn btn-secondary watch"/>
                 </div>
             </div>
         );
     }
     else{
         return(
-            <div>
+            <div className="postBlock">
                 <h1>{title}</h1>
                 <p>{overview}</p>
             </div>
