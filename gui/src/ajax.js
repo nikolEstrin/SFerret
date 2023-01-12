@@ -200,18 +200,16 @@ export async function getUserById(id){
     return d;
 }
 
-export async function getUserByName(id){
-    var d;
+export async function getUserName(id, setName){
     await $.ajax({
         url:"https://localhost:7144/User/Name/"+id,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setName(data)
         }, 
-        error: function(){ d = {}; },
+        error: function(){},
     });
-    return d;
 }
 
 export async function getWatchList(id){

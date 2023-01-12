@@ -104,10 +104,11 @@ function SearchPage() {
                             </button>
                         </div>
                     </form>
-                    
-                    <dl className="searchDesign">
-                        {moviesList}        
-                    </dl>
+                    <div className="listDiv">
+                        <dl className="searchDesign">
+                            {moviesList}        
+                        </dl>
+                    </div>
                 </div>
             </article>
         </div>
