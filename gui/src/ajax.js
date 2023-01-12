@@ -28,10 +28,10 @@ export async function getMovies(page){
     return d;
 }
 
-export async function getMoviesNotWatched(id){
+export async function getMoviesNotWatched(id, page){
     var d;
     await $.ajax({
-        url:"https://localhost:7144/Movies/"+id,
+        url:"https://localhost:7144/Movies/"+id+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {

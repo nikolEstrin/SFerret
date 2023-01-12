@@ -3,12 +3,16 @@ import "./SearchPage.css";
 import MovieSearchResultItem from "./MovieSearchResultItem";
 import * as aj from "../ajax";
 
-function SearchPage() {
+function  SearchPage() {
 
-    var movies = aj.getMovies(1)
-    const moviesList = movies.map((movie,key)=>{    
-        return <MovieSearchResultItem title={movie.title} overview={movie.overview}  key={key}/>
-    });
+    const getMovies = async function(n){
+        return await aj.getMovies(n);
+    }
+    var movies = getMovies(1)
+    console.log(movies[0])
+    // const moviesList = movies.map((movie,key)=>{    
+    //     return <MovieSearchResultItem title={movie.title} overview={movie.overview}  key={key}/>
+    // });
 
     return (
         <div className="searchRoot">
@@ -48,39 +52,39 @@ function SearchPage() {
                         </ul>
                         </span>
                         */}
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="visually-hidden">Toggle Dropdown</span>
+                        <div className="btn-group">
+                            <button type="button" className="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span className="visually-hidden">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu">
-                                <label class="list-group-item dropdown-item">
+                            <ul className="dropdown-menu">
+                                <label className="list-group-item dropdown-item">
                                     <div className="me-1">
-                                    <input class="form-check-input " type="checkbox" value="" id="firstCheckboxStretched"/>
+                                    <input className="form-check-input " type="checkbox" value="" id="firstCheckboxStretched"/>
                                     <h3>First checkbox</h3>
                                     </div>
                                     </label>
-                                <label class="list-group-item dropdown-item">
+                                <label className="list-group-item dropdown-item">
                                     <div className="me-1">
-                                    <input class="form-check-input me-2" type="checkbox" value="" id="secondCheckboxStretched"/>
+                                    <input className="form-check-input me-2" type="checkbox" value="" id="secondCheckboxStretched"/>
                                     <h3>Sec checkbox</h3>
                                     </div>
                                 </label>
-                                <label class="list-group-item dropdown-item">
+                                <label className="list-group-item dropdown-item">
                                     <div className="me-1">
-                                    <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched"/>
+                                    <input className="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched"/>
                                     <h3>The checkbox</h3>
                                     </div>
                                 </label>
                             </ul>
-                            <button class="btn btn-secondary btn-lg" type="button">
+                            <button className="btn btn-secondary btn-lg" type="button">
                                 Filter
                             </button>
                         </div>
                     </form>
                     
-                    <dl className="searchDesign">
+                    {/* <dl className="searchDesign">
                     {moviesList}        
-                    </dl>
+                    </dl> */}
                 </div>
             </article>
         </div>
