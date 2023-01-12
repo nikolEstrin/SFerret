@@ -16,8 +16,6 @@ function App() {
         <Route exact path='/feed' element={<Feed/>} />
         <Route exact path='/watchlist' element={<WatchListPage/>} />
         <Route exact path='/search' element={<SearchPage/>} />
-
-
       </Routes>
     </Router>
   );

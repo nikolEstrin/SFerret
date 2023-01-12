@@ -2,17 +2,38 @@ import OptionsList from "../list/OptionsList";
 import "./SearchPage.css";
 import MovieSearchResultItem from "./MovieSearchResultItem";
 import * as aj from "../ajax";
+import { useState, useEffect } from 'react';
+var pageNum = 1;
 
-function  SearchPage() {
+function SearchPage() {
+    const [movies, setMovies] = useState('');
 
-    const getMovies = async function(n){
-        return await aj.getMovies(n);
+
+    const getMoviesPerPage = function(n){
+        aj.getMovies(n, setMovies)
     }
-    var movies = getMovies(1)
-    console.log(movies[0])
-    // const moviesList = movies.map((movie,key)=>{    
-    //     return <MovieSearchResultItem title={movie.title} overview={movie.overview}  key={key}/>
-    // });
+
+    var moviesList;
+    if (movies!=''){
+        moviesList = movies.map((movie,key)=>{    
+            return <MovieSearchResultItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
+        });
+        console.log(moviesList)
+    }
+
+    const nextPage = function(){
+        pageNum++;
+        getMoviesPerPage(pageNum);
+    }
+    const prePage = function(){
+        if(pageNum > 1){
+            pageNum--;
+            getMoviesPerPage(pageNum);
+        }
+    }
+    if (pageNum==1)
+        getMoviesPerPage(pageNum);
+    
 
     return (
         <div className="searchRoot">
@@ -27,6 +48,9 @@ function  SearchPage() {
                         <h1 className="list_title">Search A Movie</h1>
                         <img src="Images/searchIcon.png" alt="..."/>
                     </div>
+                    <button onClick={() => { prePage() }}>Previous</button>
+                    <h4>{pageNum}</h4>
+                    <button onClick={() => { nextPage() }}>Next</button>
                     <form>
                         <label htmlFor="search">Search</label>
                         <input id="search" type="search" pattern=".*\S.*" required/>
@@ -82,9 +106,9 @@ function  SearchPage() {
                         </div>
                     </form>
                     
-                    {/* <dl className="searchDesign">
-                    {moviesList}        
-                    </dl> */}
+                    <dl className="searchDesign">
+                        {moviesList}        
+                    </dl>
                 </div>
             </article>
         </div>

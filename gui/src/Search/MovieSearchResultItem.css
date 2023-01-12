@@ -41,7 +41,8 @@ dl.searchDesign> :nth-of-type(2n) {
 dt.searchDesign{
 	font-weight: 700;
 	font-size: 2rem;
-    transform: translate(2%, 80%);
+    transform: translate(2%, 0%);
+  max-width: 35%;
 }
 
 dd.searchDesign{
