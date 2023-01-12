@@ -48,6 +48,9 @@ function Feed() {
                             <center>
                                 <h1>Feed</h1>
                                 <br/>
+                                <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
+                                <h4 className="oneLine">{pageNum}</h4>
+                                <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button>
                                 {moviesList}
                             </center>
                         </div>

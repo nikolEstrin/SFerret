@@ -18,7 +18,6 @@ function SearchPage() {
         moviesList = movies.map((movie,key)=>{    
             return <MovieSearchResultItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
         });
-        console.log(moviesList)
     }
 
     const nextPage = function(){
@@ -48,9 +47,9 @@ function SearchPage() {
                         <h1 className="list_title">Search A Movie</h1>
                         <img src="Images/searchIcon.png" alt="..."/>
                     </div>
-                    <button onClick={() => { prePage() }}>Previous</button>
-                    <h4>{pageNum}</h4>
-                    <button onClick={() => { nextPage() }}>Next</button>
+                    <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
+                    <h4 className="oneLine">{pageNum}</h4>
+                    <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button>
                     <form>
                         <label htmlFor="search">Search</label>
                         <input id="search" type="search" pattern=".*\S.*" required/>

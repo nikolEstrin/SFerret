@@ -1,7 +1,24 @@
 import "./MoviePostItem.css"
-import posts from "./posts";
 import PostItem from "./PostItem";
+import * as aj from "../ajax";
+import { useState, useEffect } from 'react';
 function MoviePostItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title}){
+
+    const [posts, setMovies] = useState('');
+
+    const getPostsPerMovieId = function(){
+        aj.getPostsByMovie(id)
+    }
+    getPostsPerMovieId();
+    console.log(posts);
+    var postsList;
+    if (posts!=''){
+        postsList = posts.map((post,key)=>{    
+            return <PostItem id={post.Id} userid={post.UserId} movieid={post.MovieId} rating={post.Rating} comment={post.Comment} date={post.PublishedDate} key={key}/>
+        });
+    }
+
+
 
     releaseDate = releaseDate.substring(0,10);
     if (adult)

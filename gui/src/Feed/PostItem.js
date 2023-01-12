@@ -1,11 +1,11 @@
 import "./PostItem.css"
 
-function PostItem({name, date, comment, rating}){
+function PostItem({id, userid, movieid, rating, comment, date}){
  
     return(
         <div>
             <div className="comment text-justify float-left">
-                <h4>{name}</h4>
+                <h4>{userid}</h4>
                 <span>- {date}</span>
                 <br/>
                 <p>{comment}</p>
