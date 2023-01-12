@@ -104,9 +104,14 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "";
+                    string getMovieSql = @"SELECT * FROM Movie 
+                                          WHERE Id NOT IN(SELECT MovieId FROM WatchList WHERE UserId=@Id)";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Id";
+                        param.Value = id;
+                        command.Parameters.Add(param);
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())

@@ -1,0 +1,59 @@
+.listComments {
+    width: 50%;
+    height: 30vh;
+    overflow: scroll;
+}
+
+.postBlock {
+    background-color: rgba(152, 109, 24, 0.973);
+    margin-bottom: 10px;
+    padding-top: 10px;
+    width: 70%;
+    height: 30%;
+    border-radius: 4%;
+}
+
+.containerPost{
+    position: relative;
+    z-index: 100;
+    width: 15%;
+    transform: translate(50%, -70%);
+  }
+
+  .containerPost img{
+    width: 100%;
+    height: auto;
+  }
+  
+  .containerPost button {
+    position: absolute;
+    top: 60%;
+    width: 80%;
+    height: 100%;
+    transform: translate(-100%, -65%);
+	background-color: transparent;
+	border-color: transparent;
+  }
+  .containerPost button:hover {
+	background-color: transparent;
+	border-color: transparent;
+  }
+  
+  * {
+	border: 0;
+	box-sizing: border-box;
+	margin: 0;
+}
+
+.addP{
+    transform: translate(120%, 60%) !important;
+    width: 18%;
+}
+.addW{
+    transform: translate(300%, -40%) !important;
+    width: 12%;
+}
+
+.oneLine{
+  display: inline-block;
+}

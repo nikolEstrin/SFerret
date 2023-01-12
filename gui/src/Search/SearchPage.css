@@ -76,6 +76,7 @@ input {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+	
 }
 input:focus, input:valid {
 	background: var(--input);
@@ -86,6 +87,7 @@ input:focus, input:valid {
 	transition-delay: calc(var(--dur) * 0.25);
 	width: 100%;
 	height: 3em;
+	color: black;
 }
 input:focus {
 	animation: showCaret var(--dur) steps(1);
@@ -184,9 +186,19 @@ button.filter {
 	float: left;
 }
 
-#firstCheckboxStretched1 {
+#secondCheckboxStretched { /*TRY USING ONLY DROPDOWN AND CHANGE AFTER TO CHECKBOX*/
+	width: 1px;
+	float: left;
+}
+
+#thirdCheckboxStretched { /*TRY USING ONLY DROPDOWN AND CHANGE AFTER TO CHECKBOX*/
+	width: 1px;
+	float: left;
+}
+
+/* #firstCheckboxStretched1 {
 	position: relative;
 	width: 8px;
 	float: left;
 	z-index: -1 !important;
-}
+} */

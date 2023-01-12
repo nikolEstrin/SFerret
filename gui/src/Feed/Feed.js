@@ -1,25 +1,66 @@
 import OptionsList from "../list/OptionsList";
-import movies from "../list/movies";
 import MoviePostItem from "./MoviePostItem";
 import "./Feed.css"
+import * as aj from "../ajax";
+import { useState, useEffect } from 'react';
+var pageNum = 1;
+
+
 function Feed() {
-    const moviesList = movies.map((movie,key)=>{    
-        return <MoviePostItem title={movie.title} overview={movie.overview} index={key}  key={key}/>
-    });
+    const [movies, setMovies] = useState('');
+
+    const getMoviesPerPage = function(n){
+        aj.getMovies(n, setMovies)
+    }
+
+    var moviesList;
+    if (movies!=''){
+        moviesList = movies.map((movie,key)=>{    
+            return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
+        });
+        console.log(moviesList)
+    }
+
+    const nextPage = function(){
+        pageNum++;
+        getMoviesPerPage(pageNum);
+    }
+    const prePage = function(){
+        if(pageNum > 1){
+            pageNum--;
+            getMoviesPerPage(pageNum);
+        }
+    }
+    if (pageNum==1)
+        getMoviesPerPage(pageNum);
 
     return (
-        <div className="FeedBackground">
+        <div>
+            <img className='background' src="Images/feed_background.png" />
             <div>
                 <OptionsList/>
             </div>
-            <div>
-                <br/>
-                <center>
-                    <h1>Feed</h1>
-                    <br/>
-                    {moviesList}
-                </center>
-            </div>
+
+                <div className="row">
+                    <div className="col-9">
+                        <br/>
+                        <div>
+                            <center>
+                                <h1>Feed</h1>
+                                <br/>
+                                {moviesList}
+                            </center>
+                        </div>
+                    </div>
+                    <div className="col-3">
+                        <form>
+                            <label htmlFor="search">Search</label>
+                            <input id="search" type="search" pattern=".*\S.*" required/>
+                            <span className="caret"></span>
+                        </form>
+                    </div>
+                </div>
+
         </div>
     );
 }

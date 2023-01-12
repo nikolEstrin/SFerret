@@ -1,6 +1,6 @@
 import "./MovieSearchResultItem.css"
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-function MovieSearchResultItem({title, overview}) {
+function MovieSearchResultItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title}) {
 
 
     return (
