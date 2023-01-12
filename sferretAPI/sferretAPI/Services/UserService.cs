@@ -120,7 +120,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<User> Register(User user)
+        public async Task<int?> Register(User user)
         {
             try
             {
@@ -143,15 +143,34 @@ namespace sferretAPI.Services
                         command.Parameters.Add(param);
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
+                            if (reader.HasRows)
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    getMovieSql = @"SELECT Id FROM User WHERE FullName=@FullName AND Password=@Password";
+                    using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@FullName";
+                        param.Value = user.FullName;
+                        command.Parameters.Add(param);
+                        param = new MySqlParameter();
+                        param.ParameterName = "@Password";
+                        param.Value = user.Password;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
                             while (reader.Read())
                             {
-                               id = Convert.ToInt32(reader.GetString("id"));
+                                id = Convert.ToInt32(reader.GetString("id"));
                             }
                         }
                     }
                     if (id > 0)
                         user.Id = id;
-                    return user;
+                    return user.Id;
                 }
             }
             catch (Exception ex)

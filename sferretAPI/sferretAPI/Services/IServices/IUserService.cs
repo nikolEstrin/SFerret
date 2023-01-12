@@ -8,7 +8,7 @@ namespace sferretAPI.Services.IServices
         /// </summary>
         /// <param name="user">User's details (User object)</param>
         /// <returns>User object with updated details</returns>
-        public Task<User> Register(User user);
+        public Task<int?> Register(User user);
 
         /// <summary>
         /// Login to service with username and password

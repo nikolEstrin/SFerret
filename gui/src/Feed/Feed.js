@@ -18,7 +18,6 @@ function Feed() {
         moviesList = movies.map((movie,key)=>{    
             return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
         });
-        console.log(moviesList)
     }
 
     const nextPage = function(){

@@ -18,7 +18,9 @@ function MoviePostItem({adult, collection, id, language, overview, posterPath, r
         });
     }
 
-
+    const addMovieToWatchList = function(){
+        aj.AddToWatchList(localStorage.getItem('id'), id);    
+    }
 
     releaseDate = releaseDate.substring(0,10);
     if (adult)
@@ -50,7 +52,7 @@ function MoviePostItem({adult, collection, id, language, overview, posterPath, r
             </div>
             <div className="containerPost addW">
                 <img src="Images/addToWatchListButton.png" alt="Snow"/>
-                <button type="button" className="btn btn-secondary watch"/>
+                <button onClick={addMovieToWatchList} type="button" className="btn btn-secondary watch"/>
             </div>
         </div>
     );
