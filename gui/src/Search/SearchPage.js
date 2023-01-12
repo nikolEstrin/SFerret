@@ -1,12 +1,11 @@
 import OptionsList from "../list/OptionsList";
 import "./SearchPage.css";
-import movies from "../list/movies";
 import MovieSearchResultItem from "./MovieSearchResultItem";
-import * as aj from "./ajax";
+import * as aj from "../ajax";
 
 function SearchPage() {
 
-    movies = aj.getMovies(1)
+    var movies = aj.getMovies(1)
     const moviesList = movies.map((movie,key)=>{    
         return <MovieSearchResultItem title={movie.title} overview={movie.overview}  key={key}/>
     });
