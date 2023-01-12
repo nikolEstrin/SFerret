@@ -49,34 +49,31 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<User> Get(string name)
+        public async Task<string?> GetName(int id)
         {
             try
             {
-                User user = null;
+                string? fullName = null;
                 using (MySqlConnection con = new MySqlConnection(_connectionstring))
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getMovieSql = "SELECT * FROM User WHERE FullName = @Name";
+                    string getMovieSql = "SELECT FullName FROM User WHERE Id = @id";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
-                        param.ParameterName = "@Name";
-                        param.Value = name;
+                        param.ParameterName = "@Id";
+                        param.Value = id;
                         command.Parameters.Add(param);
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                user = new User();
-                                user.Id = reader.GetInt32("Id");
-                                user.FullName = reader.GetString("FullName");
-                                user.Password = reader.GetString("Password");
+                                fullName = reader.GetString("FullName");
                             }
                         }
                     }
-                    return user;
+                    return fullName;
                 }
             }
             catch (Exception ex)
@@ -133,7 +130,6 @@ namespace sferretAPI.Services
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getMovieSql = @"INSERT INTO User (FullName, Password)
-                    OUTPUT INSERTED.[Id]
                     VALUES(@FullName, @Password)";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {

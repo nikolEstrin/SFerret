@@ -45,10 +45,10 @@ namespace sferretAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Name/{name}")]
-        public async Task<IActionResult> Get(string name)
+        [HttpGet("Name/{id}")]
+        public async Task<IActionResult> GetName(int id)
         {
-            var result = await _userService.Get(name);
+            var result = await _userService.Get(id);
             if (result == null)
                 return NotFound();
             return Ok(result);
