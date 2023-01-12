@@ -25,11 +25,11 @@ namespace sferretAPI.Services.IServices
         public Task<User> Get(int id);
 
         /// <summary>
-        /// Get details of given user by Name
+        /// Get name of given user by id
         /// </summary>
-        /// <param name="name">User's name</param>
-        /// <returns>User object</returns>
-        public Task<User> Get(string name);
+        /// <param name="id">User's id</param>
+        /// <returns>User's name</returns>
+        public Task<string?> GetName(int id);
 
     }
 }
