@@ -14,18 +14,16 @@ export async function getMovieById(id){
     return d;
 }
 
-export async function getMovies(page){
-    var d;
-    await $.ajax({
+export function getMovies(page, setMovies){
+    $.ajax({
         url:"https://localhost:7144/Movies?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data)
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
 export async function getMoviesNotWatched(id, page){
@@ -202,7 +200,7 @@ export async function getUserById(id){
     return d;
 }
 
-export async function getMovieByName(id){
+export async function getUserByName(id){
     var d;
     await $.ajax({
         url:"https://localhost:7144/User/Name/"+id,

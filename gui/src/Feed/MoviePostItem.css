@@ -53,3 +53,7 @@
     transform: translate(300%, -40%) !important;
     width: 12%;
 }
+
+.oneLine{
+  display: inline-block;
+}
