@@ -9,9 +9,11 @@ namespace sferretAPI.Services
     public class PostService : IPostService
     {
         private readonly string _connectionstring;
-        public PostService(IConfiguration configuration)
+        private readonly IMovieService _movieService;
+        public PostService(IConfiguration configuration, IMovieService movieService)
         {
             _connectionstring = configuration.GetConnectionString("SFerretDB");
+            _movieService = movieService;
         }
 
         public async Task Create(Post post)
@@ -472,6 +474,178 @@ namespace sferretAPI.Services
                     }
                 }
                 return posts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Movie>> GetAll_Movies()
+        {
+            try
+            {
+                List<int> posts = new List<int>();
+                int mid;
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getPostSql = "SELECT DISTINCT MovieId FROM Post ORDER BY MovieId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                mid = reader.GetInt32("MovieId");
+                                posts.Add(mid);
+                            }
+                        }
+                    }
+                }
+                return await ConvertMovies(posts);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Movie>> GetByGenre_Movies(string genre)
+        {
+
+            //var dbGenre = await con.QueryAsync<Genre>("SELECT * FROM Genre WHERE Name = @Name", new { Name = genre });
+            //if (dbGenre == null)
+            //    throw new Exception("No such genre " + genre);
+
+            try
+            {
+                List<int> posts = new List<int>();
+                int mid;
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getPostSql = @"SELECT DISTINCT Post.MovieId FROM Post, MovieGenre, Genre
+                    WHERE Post.MovieId = MovieGenre.MovieId AND MovieGenre.GenreId = Genre.Id AND Genre.GenreName = @Genre
+                    ORDER BY Post.MovieId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Genre";
+                        param.Value = genre;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                mid = reader.GetInt32("MovieId");
+                                posts.Add(mid);
+                            }
+                        }
+                    }
+                }
+                return await ConvertMovies(posts);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Movie>> GetByRating_Movies(int rating, int flag)
+        {
+            try
+            {
+                List<int> posts = new List<int>();
+                int mid;
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getPostSql = "";
+                    if (flag == 1) // GREATER THAN
+                        getPostSql = @"SELECT DISTINCT MovieId FROM Post WHERE Rating > @Rating ORDER BY MovieId";
+                    else if (flag == 0) // EQUAL TO
+                        getPostSql = @"SELECT DISTINCT MovieId FROM Post WHERE Rating = @Rating ORDER BY MovieId";
+                    else if (flag == -1) // LESS THAN
+                        getPostSql = @"SELECT DISTINCT MovieId FROM Post WHERE Rating < @Rating ORDER BY MovieId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Rating";
+                        param.Value = rating;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                mid = reader.GetInt32("MovieId");
+                                posts.Add(mid);
+                            }
+                        }
+                    }
+                }
+                return await ConvertMovies(posts);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Movie>> GetByUser_Movies(int userId)
+        {
+            try
+            {
+                List<int> posts = new List<int>();
+                int mid;
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getPostSql = "SELECT DISTINCT MovieId FROM Post WHERE UserId = @UserId";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@UserId";
+                        param.Value = userId;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                mid = reader.GetInt32("MovieId");
+                                posts.Add(mid);
+                            }
+                        }
+                    }
+                }
+                return await ConvertMovies(posts);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Convert from list of ids to list of Movie objects
+        /// </summary>
+        /// <param name="movies">List of movie ids</param>
+        /// <returns>List of Movie objects</returns>
+        private async Task<List<Movie>> ConvertMovies(IEnumerable<int> movies)
+        {
+            try
+            {
+                List<Movie> MovieList = new List<Movie>();
+                foreach (int item in movies)
+                {
+                    Movie movie = await _movieService.Get(item);
+                    MovieList.Add(movie);
+                }
+                return MovieList;
             }
             catch (Exception ex)
             {
