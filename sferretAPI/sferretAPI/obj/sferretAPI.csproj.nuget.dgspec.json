@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nikol\\OneDrive\\Desktop\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj": {}
+    "C:\\Users\\avrah\\OneDrive\\שולחן העבודה\\vscode_files\\sferret\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nikol\\OneDrive\\Desktop\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj": {
+    "C:\\Users\\avrah\\OneDrive\\שולחן העבודה\\vscode_files\\sferret\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nikol\\OneDrive\\Desktop\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
+        "projectUniqueName": "C:\\Users\\avrah\\OneDrive\\שולחן העבודה\\vscode_files\\sferret\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
         "projectName": "sferretAPI",
-        "projectPath": "C:\\Users\\nikol\\OneDrive\\Desktop\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
-        "packagesPath": "C:\\Users\\nikol\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nikol\\OneDrive\\Desktop\\SFerret\\sferretAPI\\sferretAPI\\obj\\",
+        "projectPath": "C:\\Users\\avrah\\OneDrive\\שולחן העבודה\\vscode_files\\sferret\\SFerret\\sferretAPI\\sferretAPI\\sferretAPI.csproj",
+        "packagesPath": "C:\\Users\\avrah\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\avrah\\OneDrive\\שולחן העבודה\\vscode_files\\sferret\\SFerret\\sferretAPI\\sferretAPI\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\nikol\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\avrah\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -75,8 +71,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -88,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
