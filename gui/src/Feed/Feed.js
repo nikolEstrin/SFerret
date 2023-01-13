@@ -2,16 +2,22 @@ import OptionsList from "../list/OptionsList";
 import MoviePostItem from "./MoviePostItem";
 import "./Feed.css"
 import * as aj from "../ajax";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 var pageNum = 1;
-
+var searchFilter= 0 //0=regular, 1=title
 
 function Feed() {
+    const [posts, setPosts] = useState('');
     const [movies, setMovies] = useState('');
+    var moviesId = []
+    const searchBox = useRef(null);
 
-    const getMoviesPerPage = function(n){
-        aj.getMovies(n, setMovies)
-    }
+    useEffect(() =>{
+        aj.getPosts(setPosts);
+        for(let i = 0; i < posts.length; i++) {
+            
+        }
+    },[]);
 
     var moviesList;
     if (movies!=''){
@@ -20,19 +26,28 @@ function Feed() {
         });
     }
 
-    const nextPage = function(){
+    const nextPage = function (event) {
         pageNum++;
-        getMoviesPerPage(pageNum);
+        if (searchFilter==0)
+            aj.getMovies(pageNum, setMovies);
+        else if(searchFilter==1)
+            aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
     }
-    const prePage = function(){
-        if(pageNum > 1){
+    const prePage = function (event) {
+        if (pageNum > 1) {
             pageNum--;
-            getMoviesPerPage(pageNum);
+            if (searchFilter==0)
+                aj.getMovies(pageNum, setMovies);
+            else if(searchFilter==1)
+                aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
         }
     }
-    if (pageNum==1)
-        getMoviesPerPage(pageNum);
 
+    const search = function(event){
+        pageNum=1;
+        searchFilter = 1;
+        aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+    }
     return (
         <div>
             <img className='background' src="Images/feed_background.png" />
@@ -61,7 +76,7 @@ function Feed() {
                     <div className="col-3">
                         <form>
                             <label htmlFor="search">Search</label>
-                            <input id="search" type="search" pattern=".*\S.*" required/>
+                            <input id="search" type="search" pattern=".*\S.*" ref={searchBox} onKeyUp={search} required/>
                             <span className="caret"></span>
                         </form>
                     </div>
