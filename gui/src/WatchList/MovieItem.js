@@ -1,13 +1,20 @@
 import "./MovieItem.css"
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import * as aj from "../ajax";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function MovieItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title}){
-    
+    const comment = useRef(null);
+    const [rating, setRating] = useState('');
     const removeFromList = function(){
         aj.deleteFromWatchList(localStorage.getItem('id'), id);
     }
+
+    const addPostModal = function(){
+        if(comment.current != null)
+            aj.CreatePost(localStorage.getItem('id'), id, rating, comment.current.value);
+    }
+    
 
     return (
         <>
@@ -40,11 +47,21 @@ function MovieItem({adult, collection, id, language, overview, posterPath, relea
                         </div>
                         <div className="modal-body">
                             <div className="input-group">
-                                <input type="text" className="form-control" placeholder="Your Comment" aria-label="comment" aria-describedby="basic-addon1" id="usersComment" required></input>
+                                <input type="text" className="form-control" ref={comment} placeholder="Your Comment" aria-label="comment" aria-describedby="basic-addon1" id="usersComment" required></input>
+                                <div className="dropdown">
+                                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Your Rating</button>
+                                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><button className="dropdown-item" onClick={()=>{setRating(1)}}>1 Star</button></li>
+                                        <li><button className="dropdown-item" onClick={()=>{setRating(2)}}>2 Stars</button></li>
+                                        <li><button className="dropdown-item" onClick={()=>{setRating(3)}}>3 Stars</button></li>
+                                        <li><button className="dropdown-item" onClick={()=>{setRating(4)}}>4 Stars</button></li>
+                                        <li><button className="dropdown-item" onClick={()=>{setRating(5)}}>5 Stars</button></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-success " id="addButton" data-bs-dismiss="modal">Add</button>
+                            <button type="button" onClick={addPostModal()} className="btn btn-success " id="addButton" data-bs-dismiss="modal">Add Post</button>
                         </div>
                     </div>
                 </div>

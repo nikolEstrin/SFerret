@@ -68,18 +68,16 @@ export async function getMoviesByLanguage(lang, page){
     return d;
 }
 
-export async function getMoviesByTitle(title, page){
-    var d;
+export async function getMoviesByTitle(title, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Title/"+title+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){ },
     });
-    return d;
 }
 
 export async function getMoviesByRuntime(time, flag, page){
@@ -215,7 +213,7 @@ export async function getUserName(id, setName){
         type:'GET',
         data:{},
         success:function(data) {
-            setName(data)
+            setName(data.fullName)
         }, 
         error: function(){},
     });
@@ -322,18 +320,16 @@ export async function getPostById(id){
     return d;
 }
 
-export async function getPosts(){
-    var d;
+export async function getPosts(setPosts){
     await $.ajax({
         url:"https://localhost:7144/Posts",
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setPosts(data)
         }, 
-        error: function(){ d = []; },
+        error: function(){ },
     });
-    return d;
 }
 
 export async function getPostByMovieAndUser(movie, user){
@@ -350,18 +346,16 @@ export async function getPostByMovieAndUser(movie, user){
     return d;
 }
 
-export async function getPostsByMovie(movie){
-    var d;
+export async function getPostsByMovie(movie, setPosts){
     await $.ajax({
         url:"https://localhost:7144/Post/Movie/"+movie,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setPosts(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
 export async function getPostsByGenre(gen){

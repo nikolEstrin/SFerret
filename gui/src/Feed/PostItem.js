@@ -5,11 +5,12 @@ import { useState, useEffect } from 'react';
 function PostItem({id, userid, movieid, rating, comment, date}){
  
     const [name, setName] = useState('');
+    date = date.substring(0,10);
 
-    const getMoviesPerPage = function(){
-        aj.getMovies(userid, setName)
+    const getUserName = function(){
+        aj.getUserName(userid, setName)
     }
-    getMoviesPerPage();
+    getUserName();
     return(
         <div>
             <div className="comment text-justify float-left">
@@ -17,6 +18,7 @@ function PostItem({id, userid, movieid, rating, comment, date}){
                 <span>- {date}</span>
                 <br/>
                 <p>{comment}</p>
+                <p className="stars">{rating} Stars</p>
             </div>    
         </div>
     );
