@@ -22,7 +22,7 @@ namespace sferretAPI.Controllers
         public async Task<IActionResult> Register(User user)
         {
             var result = await _userService.Register(user);
-            if (result.Id == 0)
+            if (result == 0)
                 return BadRequest();
             return Ok(result);
         }

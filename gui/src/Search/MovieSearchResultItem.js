@@ -1,7 +1,12 @@
 import "./MovieSearchResultItem.css"
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import * as aj from "../ajax";
+import { useState, useEffect } from 'react';
 function MovieSearchResultItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title}) {
 
+    const addMovieToWatchList = function(){
+        aj.AddToWatchList(localStorage.getItem('id'), id);    
+    }
 
     return (
         <div className="bodySearch">
@@ -19,7 +24,7 @@ function MovieSearchResultItem({adult, collection, id, language, overview, poste
                 </div>
                 <div className="containerdd addWatchList">
                     <img src="Images/addToWatchListButton.png" alt="Snow"/>
-                    <button type="button" className="btn btn-secondary watch"/>
+                    <button onClick={addMovieToWatchList} type="button" className="btn btn-secondary watch"/>
                 </div>
             </dd>
         </div>

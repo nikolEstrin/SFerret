@@ -128,3 +128,8 @@ label {
 		transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
 	}
 }
+.moviesList1{
+	overflow-y: auto;
+	height: 550px;
+	width: 90%;
+}

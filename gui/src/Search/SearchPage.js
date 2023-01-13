@@ -2,37 +2,47 @@ import OptionsList from "../list/OptionsList";
 import "./SearchPage.css";
 import MovieSearchResultItem from "./MovieSearchResultItem";
 import * as aj from "../ajax";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 var pageNum = 1;
+var searchFilter= 0 //0=regular, 1=title
 
 function SearchPage() {
     const [movies, setMovies] = useState('');
+    const searchBox = useRef(null);
 
-
-    const getMoviesPerPage = function(n){
-        aj.getMovies(n, setMovies)
-    }
+    useEffect(() =>{
+        aj.getMovies(1, setMovies)
+    },[]);
 
     var moviesList;
-    if (movies!=''){
-        moviesList = movies.map((movie,key)=>{    
-            return <MovieSearchResultItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
+    if (movies != '') {
+        moviesList = movies.map((movie, key) => {
+            return <MovieSearchResultItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key} />
         });
-        console.log(moviesList)
     }
 
-    const nextPage = function(){
+    const nextPage = function (event) {
         pageNum++;
-        getMoviesPerPage(pageNum);
+        if (searchFilter==0)
+            aj.getMovies(pageNum, setMovies);
+        else if(searchFilter==1)
+            aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
     }
-    const prePage = function(){
-        if(pageNum > 1){
+    const prePage = function (event) {
+        if (pageNum > 1) {
             pageNum--;
-            getMoviesPerPage(pageNum);
+            if (searchFilter==0)
+                aj.getMovies(pageNum, setMovies);
+            else if(searchFilter==1)
+                aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
         }
     }
-    if (pageNum==1)
-        getMoviesPerPage(pageNum);
+
+    const search = function(event){
+        pageNum=1;
+        searchFilter = 1;
+        aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+    }
     
 
     return (
@@ -48,12 +58,12 @@ function SearchPage() {
                         <h1 className="list_title">Search A Movie</h1>
                         <img src="Images/searchIcon.png" alt="..."/>
                     </div>
-                    <button onClick={() => { prePage() }}>Previous</button>
-                    <h4>{pageNum}</h4>
-                    <button onClick={() => { nextPage() }}>Next</button>
+                    <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
+                    <h4 className="oneLine">{pageNum}</h4>
+                    <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button>
                     <form>
                         <label htmlFor="search">Search</label>
-                        <input id="search" type="search" pattern=".*\S.*" required/>
+                        <input id="search" type="search" pattern=".*\S.*" ref={searchBox} onKeyUp={search} required/>
                         <span className="caret"></span>
                         {/* 
                         <span class="dropdown">
@@ -105,10 +115,11 @@ function SearchPage() {
                             </button>
                         </div>
                     </form>
-                    
-                    <dl className="searchDesign">
-                        {moviesList}        
-                    </dl>
+                    <div className="listDiv">
+                        <dl className="searchDesign">
+                            {moviesList}        
+                        </dl>
+                    </div>
                 </div>
             </article>
         </div>

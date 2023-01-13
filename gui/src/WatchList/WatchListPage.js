@@ -1,12 +1,23 @@
 import OptionsList from "../list/OptionsList";
 import "../list/OptionsList.css";
 import MovieItem from "./MovieItem";
-import movies from "../list/movies";
 import "./WatchListPage.css"
+import * as aj from "../ajax";
+import { useState, useEffect } from 'react';
+
 function WatchListPage() {
-    const moviesList = movies.map((movie,key)=>{    
-        return <MovieItem title={movie.title} overview={movie.overview}  key={key}/>
-    });
+    const [movies, setMovies] = useState('');
+
+    const getMoviesWatchList = function(){
+        aj.getWatchList(localStorage.getItem('id'), setMovies)
+    }
+    getMoviesWatchList();
+    var moviesList;
+    if (movies!=''){
+        moviesList = movies.map((movie,key)=>{    
+            return <MovieItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
+        });
+    }
 
     return(
         <div>

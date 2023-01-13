@@ -152,38 +152,47 @@ export async function getMoviesByPost(flag, page){
     return d;
 }
 
-export async function login(username, password){
-    var d;
+export async function login(username, password, history){
     await $.ajax({
-        url:"http://localhost:7144/User/Login",
+        url:"https://localhost:7144/User/Login",
         type:'POST',
         contentType:"application/json",
         data: JSON.stringify({id: 0, fullName: username, password: password}),
         success:function(data) {
-            d=data;
+            localStorage.setItem('id', data);
+            localStorage.setItem('username', username);
+			history("/feed");
+            console.log(data);
         }, 
         error: function(data){
-          console.log(data);
+            console.log(username, password)
+            document.getElementById('alert').style.visibility = "collapse";
+            document.getElementById('alert').innerHTML = "Incorrect username and / or password";
+            document.getElementById('alert').style.visibility = "visible";
+            console.log("E", data);
         },
     });
-    return d;
 }
 
-export async function register(username, password){
-    var d;
+export async function register(username, password, history){
     await $.ajax({
-        url:"http://localhost:7144/User/Register",
+        url:"https://localhost:7144/User/Register",
         type:'POST',
         contentType:"application/json",
         data: JSON.stringify({id: 0, fullName: username, password: password}),
         success:function(data) {
-            d=data;
+            localStorage.setItem('id', data);
+            localStorage.setItem('username', username);
+			history("/feed");
         }, 
         error: function(data){
-          console.log(data);
+            document.getElementById('alert').style.visibility = "collapse";
+            document.getElementById('alert').innerHTML = "This username is taken, try another one:)";
+            document.getElementById('alert').style.visibility = "visible";
+
+            document.getElementById("usernameR").value = "";
         },
     });
-    return d;
 }
 
 export async function getUserById(id){
@@ -200,38 +209,34 @@ export async function getUserById(id){
     return d;
 }
 
-export async function getUserByName(id){
-    var d;
+export async function getUserName(id, setName){
     await $.ajax({
         url:"https://localhost:7144/User/Name/"+id,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setName(data)
         }, 
-        error: function(){ d = {}; },
+        error: function(){},
     });
-    return d;
 }
 
-export async function getWatchList(id){
-    var d;
+export async function getWatchList(id, setMovies){
     await $.ajax({
         url:"https://localhost:7144/WatchList/"+id,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){ },
     });
-    return d;
 }
 
 export async function AddToWatchList(user, movie){
     var d;
     await $.ajax({
-        url:"http://localhost:7144/WatchList/"+user+"/Movie/"+movie,
+        url:"https://localhost:7144/WatchList/"+user+"/Movie/"+movie,
         type:'POST',
         success:function(data) {
             d=data;
@@ -246,7 +251,7 @@ export async function AddToWatchList(user, movie){
 export async function deleteFromWatchList(user, movie){
     var d;
     await $.ajax({
-        url:"http://localhost:7144/WatchList/"+user+"/Movie/"+movie,
+        url:"https://localhost:7144/WatchList/"+user+"/Movie/"+movie,
         type:'DELETE',
         success:function(data) {
             d=data;
@@ -261,7 +266,7 @@ export async function deleteFromWatchList(user, movie){
 export async function CreatePost(user, movie, rating, comment){
     var d;
     await $.ajax({
-        url:"http://localhost:7144/Post",
+        url:"https://localhost:7144/Post",
         type:'POST',
         contentType:"application/json",
         data: JSON.stringify({id: 0, userId: user, movieId: movie, rating: rating, comment: comment, publishedDate: "2023-01-18"}),
@@ -276,7 +281,7 @@ export async function CreatePost(user, movie, rating, comment){
 export async function UpdatePost(user, movie, rating, comment){
     var d;
     await $.ajax({
-        url:"http://localhost:7144/Post",
+        url:"https://localhost:7144/Post",
         type:'PUT',
         contentType:"application/json",
         data: JSON.stringify({id: 0, userId: user, movieId: movie, rating: rating, comment: comment, publishedDate: "2023-01-18"}),
@@ -291,7 +296,7 @@ export async function UpdatePost(user, movie, rating, comment){
 export async function DeletePost(user, movie){
     var d;
     await $.ajax({
-        url:"http://localhost:7144/Post",
+        url:"https://localhost:7144/Post",
         type:'DELETE',
         contentType:"application/json",
         data: JSON.stringify({id: 0, userId: user, movieId: movie, rating: 0, comment: "delete me", publishedDate: "2023-01-18"}),

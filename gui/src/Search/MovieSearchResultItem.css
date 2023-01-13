@@ -13,7 +13,7 @@ article.articleSearch {
 	padding: clamp(1rem, 2vw, 3rem);
 	border-radius: 0.5rem;
     height: 92vh;
-    overflow-y: auto;
+    overflow-y: hidden;
     margin-top: 20px;
 }
 
@@ -41,8 +41,7 @@ dl.searchDesign> :nth-of-type(2n) {
 dt.searchDesign{
 	font-weight: 700;
 	font-size: 2rem;
-    transform: translate(2%, 0%);
-  max-width: 35%;
+    transform: translate(2%, 80%);
 }
 
 dd.searchDesign{
@@ -110,4 +109,10 @@ dd.searchDesign{
     margin-right: 85px !important;
     margin-top: 30px !important;
 	transform: translate(70%, -70%);
+}
+
+.listDiv{
+  overflow-y: auto;
+  height: 420px;
+  overflow-x: hidden;
 }

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import './Login.css';
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import * as aj from "../ajax";
 
 
 function Login() {
@@ -9,8 +10,7 @@ function Login() {
 	const usernameR = useRef(null);
 	const passwordR = useRef(null);
 	const password2R = useRef(null);
-	// const reader = new FileReader();
-	// let history = useHistory();
+	let history = useNavigate();
 
 	const handleSwitchToLogin = () => {
 		closeAlert();
@@ -63,36 +63,23 @@ function Login() {
 	}
 
 	const handleLogin = (uname, password) => {
-		/*for (let user of users) {
-			if (user.uname == uname.current.value && user.password == password.current.value) {
-				localStorage.setItem('userName',uname.current.value)
-				history.push("/chat_page")
-
-				return;
-			}
-		}
-
-		document.getElementById('alert').style.visibility = "collapse";
-		document.getElementById('alert').innerHTML = "Incorrect username and / or password";
-		document.getElementById('alert').style.visibility = "visible";*/
-
+		var UserName = username.current.value;
+		var Password = password.current.value;
+		aj.login(UserName,Password, history);	
 	}
 
 	const handleRegister = (usernameR, passwordR, password2R) => {
-		/*for (let user of users) {
-			if (user.uname == usernameR.current.value) {
-				document.getElementById('alert').style.visibility = "collapse";
-				document.getElementById('alert').innerHTML = "This username is taken, try another one:)";
-				document.getElementById('alert').style.visibility = "visible";
-
-				document.getElementById("usernameR").value = "";
-				document.getElementById("passwordR").value = "";
-				document.getElementById("password2R").value = "";
-				return;
-			}
-
+		var UsernameR = usernameR.current.value;
+		var PasswordR = passwordR.current.value;
+		var Password2R = password2R.current.value;
+		if (UsernameR == "" || PasswordR == "" || Password2R == "" ) {
+			document.getElementById('alert').style.visibility = "collapse";
+			document.getElementById('alert').innerHTML = "Something is missing";
+			document.getElementById('alert').style.visibility = "visible";	
+			return;
 		}
-		if (passwordR.current.value != password2R.current.value) {
+
+		if (PasswordR != Password2R) {
 			document.getElementById('alert').style.visibility = "collapse";
 			document.getElementById('alert').innerHTML = "The passwords do not match:(";
 			document.getElementById('alert').style.visibility = "visible";
@@ -103,23 +90,13 @@ function Login() {
 		}
 
 		var passw = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{3,}/;
-		if(!passwordR.current.value.match(passw)) {
+		if(!PasswordR.match(passw)) {
 			document.getElementById('alert').style.visibility = "collapse";
 			document.getElementById('alert').innerHTML = "Password need to contain at least one numeric digit, one uppercase and one lowercase letter";
 			document.getElementById('alert').style.visibility = "visible";	
-			return
+			return;
 		}
-
-		if (usernameR.current.value == "" || passwordR.current.value == "" || displayName.current.value == "") {
-			document.getElementById('alert').style.visibility = "collapse";
-			document.getElementById('alert').innerHTML = "Something is missing";
-			document.getElementById('alert').style.visibility = "visible";	
-			return
-		}
-
-		users.push({ uname: usernameR.current.value, dname: displayName.current.value, password: passwordR.current.value, img: profile, contacts: [] })
-		localStorage.setItem('userName',usernameR.current.value)
-		history.push("/chat_page")*/
+		aj.register(UsernameR,PasswordR,history);
 
 	}
 
