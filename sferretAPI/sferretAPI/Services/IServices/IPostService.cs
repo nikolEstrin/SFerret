@@ -79,6 +79,35 @@ namespace sferretAPI.Services.IServices
         /// <returns>List of Post objects</returns>
         public Task<List<Post>> GetByUser(int userId);
 
+        /// <summary>
+        /// Retrive all movies that have posts in DB
+        /// </summary>
+        /// <returns>List of Movie objects</returns>
+        public Task<List<Movie>> GetAll_Movies();
 
+        /// <summary>
+        /// Get all movies that have posts in DB that are matching with given rating
+        /// If flag equals 1, we get all posts with rating that is greater or equal to given value
+        /// If flag equals 0, we get all posts with rating that is equal to given value
+        /// If flag equals -1, we get all posts with rating that is less or equal to given value
+        /// </summary>
+        /// <param name="rating">Int value between 1-5/10</param>
+        /// <param name="flag">"Boolean" value</param>
+        /// <returns>List of Movie objects</returns>
+        public Task<List<Movie>> GetByRating_Movies(int rating, int flag);
+
+        /// <summary>
+        /// Get all movies that have posts in DB that are tagged as given genre
+        /// </summary>
+        /// <param name="genre">Genre name</param>
+        /// <returns>List of movie id's</returns>
+        public Task<List<Movie>> GetByGenre_Movies(string genre);
+
+        /// <summary>
+        /// Get all movies that have posts in DB that a given user wrote
+        /// </summary>
+        /// <param name="userId">User's id</param>
+        /// <returns>List of Movie objects</returns>
+        public Task<List<Movie>> GetByUser_Movies(int userId);
     }
 }

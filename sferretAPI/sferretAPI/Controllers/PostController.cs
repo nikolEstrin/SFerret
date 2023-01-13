@@ -92,5 +92,34 @@ namespace sferretAPI.Controllers
             var posts = await _postService.GetByUser(userId);
             return Ok(posts);
         }
+
+        [HttpGet("Rating/{rating}/Flag/{flag}/Movies")]
+        public async Task<IActionResult> GetByRating_Movies(int rating, int flag)
+        {
+            var posts = await _postService.GetByRating_Movies(rating, flag);
+            return Ok(posts);
+        }
+
+        [HttpGet("Genre/{genre}/Movies")]
+        public async Task<IActionResult> GetByGenre_Movies(string genre)
+        {
+            var posts = await _postService.GetByGenre_Movies(genre);
+            return Ok(posts);
+        }
+
+        [HttpGet]
+        [Route("/Posts/Movies")]
+        public async Task<IActionResult> GetAll_Movies()
+        {
+            var result = await _postService.GetAll_Movies();
+            return Ok(result);
+        }
+
+        [HttpGet("User/{userId}/Movies")]
+        public async Task<IActionResult> GetByUser_Movies(int userId)
+        {
+            var posts = await _postService.GetByUser_Movies(userId);
+            return Ok(posts);
+        }
     }
 }
