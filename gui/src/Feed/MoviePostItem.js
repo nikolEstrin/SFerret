@@ -2,16 +2,11 @@ import "./MoviePostItem.css"
 import PostItem from "./PostItem";
 import * as aj from "../ajax";
 import { useState, useEffect, useRef } from 'react';
-function MoviePostItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title}){
+function MoviePostItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title, posts}){
 
-    const [posts, setPosts] = useState('');
     const comment = useRef(null);
     const [rating, setRating] = useState('');
 
-    const getPostsPerMovieId = function(){
-        aj.getPostsByMovie(id, setPosts)
-    }
-    getPostsPerMovieId();
     var postsList;
     if (posts!=''){
         postsList = posts.map((post,key)=>{    
