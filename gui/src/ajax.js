@@ -160,14 +160,11 @@ export async function login(username, password, history){
             localStorage.setItem('id', data);
             localStorage.setItem('username', username);
 			history("/feed");
-            console.log(data);
         }, 
         error: function(data){
-            console.log(username, password)
             document.getElementById('alert').style.visibility = "collapse";
             document.getElementById('alert').innerHTML = "Incorrect username and / or password";
             document.getElementById('alert').style.visibility = "visible";
-            console.log("E", data);
         },
     });
 }
@@ -389,7 +386,61 @@ export async function getPostsByRating(rating, flag){
 export async function getPostsByUser(user){
     var d;
     await $.ajax({
-        url:"https://localhost:7144/Post/User"+user,
+        url:"https://localhost:7144/Post/User/"+user,
+        type:'GET',
+        data:{},
+        success:function(data) {
+            d = data;
+        }, 
+        error: function(){ d = []; },
+    });
+    return d;
+}
+
+export async function getPosts_movies(setMovies){
+    await $.ajax({
+        url:"https://localhost:7144/Posts/Movies",
+        type:'GET',
+        data:{},
+        success:function(data) {
+            setMovies(data)
+        }, 
+        error: function(){ },
+    });
+}
+
+export async function getPostsByGenre_movies(gen){
+    var d;
+    await $.ajax({
+        url:"https://localhost:7144/Post/Genre/"+gen+"/Movies",
+        type:'GET',
+        data:{},
+        success:function(data) {
+            d = data;
+        }, 
+        error: function(){ d = []; },
+    });
+    return d;
+}
+
+export async function getPostsByRating_movies(rating, flag){
+    var d;
+    await $.ajax({
+        url:"https://localhost:7144/Post/Rating/"+rating+"/Flag/"+flag+"/Movies",
+        type:'GET',
+        data:{},
+        success:function(data) {
+            d = data;
+        }, 
+        error: function(){ d = []; },
+    });
+    return d;
+}
+
+export async function getPostsByUser_movies(user){
+    var d;
+    await $.ajax({
+        url:"https://localhost:7144/Post/User/"+user+"/Movies",
         type:'GET',
         data:{},
         success:function(data) {

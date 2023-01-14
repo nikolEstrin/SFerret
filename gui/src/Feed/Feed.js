@@ -9,20 +9,26 @@ var searchFilter= 0 //0=regular, 1=title
 function Feed() {
     const [posts, setPosts] = useState('');
     const [movies, setMovies] = useState('');
-    var moviesId = []
+    var dictMoviePosts = {};
     const searchBox = useRef(null);
 
     useEffect(() =>{
         aj.getPosts(setPosts);
-        for(let i = 0; i < posts.length; i++) {
-            
-        }
+        aj.getPosts_movies(setMovies);
+       
     },[]);
 
+    for(let i = 0; i < posts.length; i++) {
+        if (posts[i].movieId in dictMoviePosts)
+            dictMoviePosts[posts[i].movieId].push(posts[i])
+        else
+        dictMoviePosts[posts[i].movieId] = [posts[i]]
+    }
+    
     var moviesList;
     if (movies!=''){
         moviesList = movies.map((movie,key)=>{    
-            return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} key={key}/>
+            return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} posts={dictMoviePosts[movie.id]} key={key}/>
         });
     }
 
