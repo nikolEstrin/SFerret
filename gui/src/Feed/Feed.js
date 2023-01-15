@@ -19,7 +19,8 @@ function Feed() {
         aj.getPosts_movies(setMovies);
        
     },[]);
-
+    if(posts.length > 0)
+        console.log("P", posts)
     for(let i = 0; i < posts.length; i++) {
         if (posts[i].movieId in dictMoviePosts)
             dictMoviePosts[posts[i].movieId].push(posts[i])
@@ -29,27 +30,11 @@ function Feed() {
     
     var moviesList;
     if (movies!=''){
+        console.log("M", movies)
         moviesList = movies.map((movie,key)=>{    
             return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} posts={dictMoviePosts[movie.id]} key={key}/>
         });
     }
-
-    // const nextPage = function (event) {
-    //     pageNum++;
-    //     if (searchFilter==0)
-    //         aj.getMovies(pageNum, setMovies);
-    //     else if(searchFilter==1)
-    //         aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
-    // }
-    // const prePage = function (event) {
-    //     if (pageNum > 1) {
-    //         pageNum--;
-    //         if (searchFilter==0)
-    //             aj.getMovies(pageNum, setMovies);
-    //         else if(searchFilter==1)
-    //             aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
-    //     }
-    // }
 
     const search = function(event){
         pageNum=1;
@@ -91,9 +76,6 @@ function Feed() {
                             <center>
                                 <h1>Feed</h1>
                                 <br/>
-                                {/* <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
-                                <h4 className="oneLine">{pageNum}</h4>
-                                <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button> */}
                                 <div className="moviesList1">
                                     <div>
                                     {moviesList}
@@ -105,10 +87,10 @@ function Feed() {
                     <div className="col-3">
                         <form className="searchSpan">
                             <label htmlFor="search">Search</label>
-                            <input id="search" type="search" pattern=".*\S.*" ref={searchBox} onKeyUp={search} required/>
+                            <input id="searchFeed" type="search" style={{color:"white"}} onClick={()=>{aj.getPosts(setPosts);aj.getPosts_movies(setMovies);}} pattern=".*\S.*" ref={searchBox} onKeyUp={search} required/>
                             <span className="caret"></span>
                         </form>
-                        <div className="dropdown dropMenu">
+                        <div className="dropdown dropMenuFeed">
                             <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> Filter</button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><button className="dropdown-item" onClick={() => { setSearchFilter(1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Movie Name' }}>Movie Name</button></li>

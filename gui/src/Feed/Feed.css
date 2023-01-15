@@ -138,3 +138,9 @@ label {
 .searchSpan{
 	margin-top: 40%;
 }
+
+.dropMenuFeed{
+	position: relative;
+	z-index: 1;
+	transform: translate(30%, 150%);
+}
