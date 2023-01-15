@@ -4,11 +4,13 @@ import MovieSearchResultItem from "./MovieSearchResultItem";
 import * as aj from "../ajax";
 import { useState, useEffect, useRef } from 'react';
 var pageNum = 1;
-var searchFilter= 0 //0=regular, 1=title
 
 function SearchPage() {
     const [movies, setMovies] = useState('');
     const searchBox = useRef(null);
+    const [searchFilter, setSearchFilter] = useState('') //0=regular, 1=regularSearch, 2=collection, 3=language, 4=runtime, 5=date, 6=genre, 7=rating, 8=post
+    const [flagFilter, setFlagFilter] = useState('')
+    //setSearchFilter(0);
 
     useEffect(() =>{
         aj.getMovies(1, setMovies)
@@ -40,84 +42,52 @@ function SearchPage() {
 
     const search = function(event){
         pageNum=1;
-        searchFilter = 1;
+        setSearchFilter(1);
         aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
     }
     
 
     return (
         <div className="searchRoot">
-            <img className='background' src="Images/popcorn_background.png"  alt="..."/>
+            <img className='background' src="Images/popcorn_background.png" alt="..." />
 
             <div>
-                <OptionsList/>
+                <OptionsList />
             </div>
             <article className="articleSearch">
                 <div>
                     <div className="containerSearch">
                         <h1 className="list_title">Search A Movie</h1>
-                        <img src="Images/searchIcon.png" alt="..."/>
+                        <img src="Images/searchIcon.png" alt="..." />
                     </div>
                     <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
                     <h4 className="oneLine">{pageNum}</h4>
                     <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button>
+                   
+                    <div className="dropdown dropMenu">
+                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> Filter</button>
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(2); document.querySelector('#dropdownMenuButton1').innerHTML = 'Title' }}>Title</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(2); document.querySelector('#dropdownMenuButton1').innerHTML = 'Collection' }}>Collection</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(3); document.querySelector('#dropdownMenuButton1').innerHTML = 'Language' }}>Language</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(4); document.querySelector('#dropdownMenuButton1').innerHTML = 'Runtime' }}>Runtime</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(6); document.querySelector('#dropdownMenuButton1').innerHTML = 'Genre' }}>Genre</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(8); setFlagFilter(true); document.querySelector('#dropdownMenuButton1').innerHTML = 'Most Posts' }}>Most Posts</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(8); setFlagFilter(false); document.querySelector('#dropdownMenuButton1').innerHTML = 'Least Posts' }}>Least Posts</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(7); setFlagFilter(-1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Rating Smaller than' }}>Rating Smaller than</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(7); setFlagFilter(0); document.querySelector('#dropdownMenuButton1').innerHTML = 'Rating Equal to' }}>Rating Equal to</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(7); setFlagFilter(1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Rating Greater than' }}>Rating Greater than</button></li>
+                        </ul>
+                    </div>
                     <form>
                         <label htmlFor="search">Search</label>
-                        <input id="search" type="search" pattern=".*\S.*" ref={searchBox} onKeyUp={search} required/>
+                        <input id="search" type="search" pattern=".*\S.*" ref={searchBox} onKeyUp={search} required />
                         <span className="caret"></span>
-                        {/* 
-                        <span class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle filter" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown button
-                        </button>
-                        <ul class="list-group filter dropdown-menu">
-                            <li class="list-group-item dropdown-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched"/>
-                                <label class="form-check-label stretched-link" id="firstCheckboxStretched1" for="firstCheckboxStretched">Movie-Name</label>
-                            </li>
-                            <li class="list-group-item dropdown-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched"/>
-                                <label class="form-check-label stretched-link" for="secondCheckboxStretched">User</label>
-                            </li>
-                            <li class="list-group-item dropdown-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched"/>
-                                <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Date</label>
-                            </li>
-                        </ul>
-                        </span>
-                        */}
-                        <div className="btn-group">
-                            <button type="button" className="btn btn-lg btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span className="visually-hidden">Toggle Dropdown</span>
-                            </button>
-                            <ul className="dropdown-menu">
-                                <label className="list-group-item dropdown-item">
-                                    <div className="me-1">
-                                    <input className="form-check-input " type="checkbox" value="" id="firstCheckboxStretched"/>
-                                    <h3>First checkbox</h3>
-                                    </div>
-                                    </label>
-                                <label className="list-group-item dropdown-item">
-                                    <div className="me-1">
-                                    <input className="form-check-input me-2" type="checkbox" value="" id="secondCheckboxStretched"/>
-                                    <h3>Sec checkbox</h3>
-                                    </div>
-                                </label>
-                                <label className="list-group-item dropdown-item">
-                                    <div className="me-1">
-                                    <input className="form-check-input me-1" type="checkbox" value="" id="thirdCheckboxStretched"/>
-                                    <h3>The checkbox</h3>
-                                    </div>
-                                </label>
-                            </ul>
-                            <button className="btn btn-secondary btn-lg" type="button">
-                                Filter
-                            </button>
-                        </div>
+                        
                     </form>
                     <div className="listDiv">
                         <dl className="searchDesign">
-                            {moviesList}        
+                            {moviesList}
                         </dl>
                     </div>
                 </div>

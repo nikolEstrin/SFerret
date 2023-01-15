@@ -168,37 +168,8 @@ label {
 	}
 }
 
-button.filter {
-	position: absolute;
-	width: 220px;
-	transform: translate(200%, -60%);
-}
-
-/* .filter {
+.dropMenu{
 	position: relative;
-	width: 200px;
-	transform: translate(200%, -30%);
-	z-index: -1 !important;
-} */
-
-#firstCheckboxStretched { /*TRY USING ONLY DROPDOWN AND CHANGE AFTER TO CHECKBOX*/
-	width: 1px;
-	float: left;
+	z-index: 1;
+	transform: translate(61%, 150%);
 }
-
-#secondCheckboxStretched { /*TRY USING ONLY DROPDOWN AND CHANGE AFTER TO CHECKBOX*/
-	width: 1px;
-	float: left;
-}
-
-#thirdCheckboxStretched { /*TRY USING ONLY DROPDOWN AND CHANGE AFTER TO CHECKBOX*/
-	width: 1px;
-	float: left;
-}
-
-/* #firstCheckboxStretched1 {
-	position: relative;
-	width: 8px;
-	float: left;
-	z-index: -1 !important;
-} */
