@@ -6,6 +6,7 @@ import Feed from './Feed/Feed';
 import WatchListPage from './WatchList/WatchListPage';
 import SearchPage from './Search/SearchPage';
 import movies from './list/movies';
+import AddPostPage from './AddPost/AddPostPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route exact path='/feed' element={<Feed/>} />
         <Route exact path='/watchlist' element={<WatchListPage/>} />
         <Route exact path='/search' element={<SearchPage/>} />
+        <Route exact path='/addpost' element={<AddPostPage/>} />
       </Routes>
     </Router>
   );

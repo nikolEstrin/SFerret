@@ -9,7 +9,6 @@ function MoviePostItem({adult, collection, id, language, overview, posterPath, r
 
     var postsList;
     if (posts!='' && posts!=undefined){
-        console.log("mopi", posts)
         postsList = posts.map((post,key)=>{    
             return <PostItem id={post.id} userid={post.userId} movieid={post.movieId} rating={post.rating} comment={post.comment} date={post.publishedDate} key={key}/>
         });

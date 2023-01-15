@@ -2,10 +2,14 @@ import "./MovieItem.css"
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import * as aj from "../ajax";
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from "react-router-dom"
+
 
 function MovieItem({adult, collection, id, language, overview, posterPath, releaseDate, runtime, title}){
     const comment = useRef(null);
     const [rating, setRating] = useState('');
+    let navi = useNavigate();
+
     const removeFromList = function(){
         aj.deleteFromWatchList(localStorage.getItem('id'), id);
     }
@@ -29,7 +33,7 @@ function MovieItem({adult, collection, id, language, overview, posterPath, relea
                     </OverlayTrigger>
                     <div className="container add_post">
                         <img src="Images/addPost.png" alt="Snow" />
-                        <button type="button" className="btn btn-secondary postAdd" data-bs-toggle="modal" data-bs-target="#exampleModal" />
+                        <button type="button" onClick={()=>{localStorage.setItem("title", title);localStorage.setItem("movieid", id);navi("/addpost")}} />
                     </div>
                     <div className="container watched">
                         <img src="Images/watched.png" alt="Snow" />
@@ -38,7 +42,7 @@ function MovieItem({adult, collection, id, language, overview, posterPath, relea
                 </dd>
                 <br />
             </div>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            {/* <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -65,7 +69,7 @@ function MovieItem({adult, collection, id, language, overview, posterPath, relea
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }
