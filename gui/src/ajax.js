@@ -40,32 +40,28 @@ export async function getMoviesNotWatched(id, page){
     return d;
 }
 
-export async function getMoviesByCollection(coll, page){
-    var d;
+export async function getMoviesByCollection(coll, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Collection/"+coll+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){ },
     });
-    return d;
 }
 
-export async function getMoviesByLanguage(lang, page){
-    var d;
+export async function getMoviesByLanguage(lang, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Lang/"+lang+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
 export async function getMoviesByTitle(title, page, setMovies){
@@ -80,74 +76,65 @@ export async function getMoviesByTitle(title, page, setMovies){
     });
 }
 
-export async function getMoviesByRuntime(time, flag, page){
-    var d;
+export async function getMoviesByRuntime(time, flag, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Time/"+time+"/Flag/"+flag+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
-export async function getMoviesByDate(date, flag, page){
-    var d;
+export async function getMoviesByDate(date, flag, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Date/"+date+"/Flag/"+flag+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){ },
     });
-    return d;
 }
 
-export async function getMoviesByGenre(gen, page){
-    var d;
+export async function getMoviesByGenre(gen, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Genre/"+gen+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
-export async function getMoviesByRating(rating, flag, page){
+export async function getMoviesByRating(rating, flag, page, setMovies){
     var d;
     await $.ajax({
         url:"https://localhost:7144/Movie/Rating/"+rating+"/Flag/"+flag+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
-export async function getMoviesByPost(flag, page){
-    var d;
+export async function getMoviesByPost(flag, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movie/Post/"+flag+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){},
     });
-    return d;
 }
 
 export async function login(username, password, history){

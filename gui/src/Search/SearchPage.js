@@ -4,6 +4,7 @@ import MovieSearchResultItem from "./MovieSearchResultItem";
 import * as aj from "../ajax";
 import { useState, useEffect, useRef } from 'react';
 var pageNum = 1;
+var isSearching = 0
 
 function SearchPage() {
     const [movies, setMovies] = useState('');
@@ -42,8 +43,25 @@ function SearchPage() {
 
     const search = function(event){
         pageNum=1;
-        setSearchFilter(1);
-        aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+        if(isSearching==0){
+            isSearching = 1;
+            if(searchFilter==0)
+                setSearchFilter(1);
+        }
+        if(searchFilter==1)
+            aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==2)
+            aj.getMoviesByCollection(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==3)
+            aj.getMoviesByCollection(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==4)
+            aj.getMoviesByRuntime(searchBox.current.value, flagFilter, pageNum, setMovies);
+        // else if(searchFilter==5)
+        //     aj.getMoviesByRuntime(searchBox.current.value, flagFilter, pageNum, setMovies);
+        else if(searchFilter==6)
+            aj.getMoviesByGenre(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==7)
+            aj.getMoviesByRating(searchBox.current.value, flagFilter, pageNum, setMovies);
     }
     
 
@@ -67,13 +85,15 @@ function SearchPage() {
                     <div className="dropdown dropMenu">
                         <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> Filter</button>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(2); document.querySelector('#dropdownMenuButton1').innerHTML = 'Title' }}>Title</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Title' }}>Title</button></li>
                             <li><button className="dropdown-item" onClick={() => { setSearchFilter(2); document.querySelector('#dropdownMenuButton1').innerHTML = 'Collection' }}>Collection</button></li>
                             <li><button className="dropdown-item" onClick={() => { setSearchFilter(3); document.querySelector('#dropdownMenuButton1').innerHTML = 'Language' }}>Language</button></li>
-                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(4); document.querySelector('#dropdownMenuButton1').innerHTML = 'Runtime' }}>Runtime</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(4); setFlagFilter(-1);document.querySelector('#dropdownMenuButton1').innerHTML = 'Runtime Smaller than' }}>Runtime Smaller than</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(4); setFlagFilter(0);document.querySelector('#dropdownMenuButton1').innerHTML = 'Runtime Equal to' }}>Runtime Equal to</button></li>
+                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(4); setFlagFilter(1);document.querySelector('#dropdownMenuButton1').innerHTML = 'Runtime Greater than' }}>Runtime Greater than</button></li>
                             <li><button className="dropdown-item" onClick={() => { setSearchFilter(6); document.querySelector('#dropdownMenuButton1').innerHTML = 'Genre' }}>Genre</button></li>
-                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(8); setFlagFilter(true); document.querySelector('#dropdownMenuButton1').innerHTML = 'Most Posts' }}>Most Posts</button></li>
-                            <li><button className="dropdown-item" onClick={() => { setSearchFilter(8); setFlagFilter(false); document.querySelector('#dropdownMenuButton1').innerHTML = 'Least Posts' }}>Least Posts</button></li>
+                            <li><button className="dropdown-item" onClick={() => { aj.getMoviesByPost(true, pageNum, setMovies); document.querySelector('#dropdownMenuButton1').innerHTML = 'Most Posts' }}>Most Posts</button></li>
+                            <li><button className="dropdown-item" onClick={() => { aj.getMoviesByPost(false, pageNum, setMovies); document.querySelector('#dropdownMenuButton1').innerHTML = 'Least Posts' }}>Least Posts</button></li>
                             <li><button className="dropdown-item" onClick={() => { setSearchFilter(7); setFlagFilter(-1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Rating Smaller than' }}>Rating Smaller than</button></li>
                             <li><button className="dropdown-item" onClick={() => { setSearchFilter(7); setFlagFilter(0); document.querySelector('#dropdownMenuButton1').innerHTML = 'Rating Equal to' }}>Rating Equal to</button></li>
                             <li><button className="dropdown-item" onClick={() => { setSearchFilter(7); setFlagFilter(1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Rating Greater than' }}>Rating Greater than</button></li>

@@ -9,7 +9,7 @@ function MovieSearchResultItem({adult, collection, id, language, overview, poste
     const addMovieToWatchList = function(){
         aj.AddToWatchList(localStorage.getItem('id'), id);    
     }
-
+    releaseDate = releaseDate.substring(0,10);
     const addPostModal = function(){
         if(comment.current != null)
             aj.CreatePost(localStorage.getItem('id'), id, rating, comment.current.value);
@@ -18,7 +18,17 @@ function MovieSearchResultItem({adult, collection, id, language, overview, poste
     return (
         <>
             <div className="bodySearch">
-                <dt className="searchDesign">{title}</dt>
+                <dt className="searchDesign">
+                <p>{title}</p>
+                <div className="detailsMovie">
+                    <b className="oneLine">Runtime: </b>
+                    <p className="oneLine">{runtime} minutes,</p>
+                    <b className="oneLine">Release Date: </b>
+                    <p className="oneLine">{releaseDate},</p>
+                    <b className="oneLine">Collection: </b>
+                    <p className="oneLine">{collection}</p>
+                </div>
+                </dt>
                 <dd className="searchDesign">
                     <OverlayTrigger placement="bottom" overlay={(<Tooltip>{overview}</Tooltip>)}>
                         <div className="containerdd">
