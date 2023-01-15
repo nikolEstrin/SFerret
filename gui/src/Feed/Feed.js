@@ -4,13 +4,15 @@ import "./Feed.css"
 import * as aj from "../ajax";
 import { useState, useEffect, useRef } from 'react';
 var pageNum = 1;
-var searchFilter= 0 //0=regular, 1=title
+var isSearching = 0
 
 function Feed() {
     const [posts, setPosts] = useState('');
     const [movies, setMovies] = useState('');
     var dictMoviePosts = {};
     const searchBox = useRef(null);
+    const [searchFilter, setSearchFilter] = useState('') //0=regular, 1=movieName, 2=movieGenre, 3=postsRating, 4=postWriter
+    const [flagFilter, setFlagFilter] = useState('')
 
     useEffect(() =>{
         aj.getPosts(setPosts);
@@ -32,27 +34,48 @@ function Feed() {
         });
     }
 
-    const nextPage = function (event) {
-        pageNum++;
-        if (searchFilter==0)
-            aj.getMovies(pageNum, setMovies);
-        else if(searchFilter==1)
-            aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
-    }
-    const prePage = function (event) {
-        if (pageNum > 1) {
-            pageNum--;
-            if (searchFilter==0)
-                aj.getMovies(pageNum, setMovies);
-            else if(searchFilter==1)
-                aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
-        }
-    }
+    // const nextPage = function (event) {
+    //     pageNum++;
+    //     if (searchFilter==0)
+    //         aj.getMovies(pageNum, setMovies);
+    //     else if(searchFilter==1)
+    //         aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+    // }
+    // const prePage = function (event) {
+    //     if (pageNum > 1) {
+    //         pageNum--;
+    //         if (searchFilter==0)
+    //             aj.getMovies(pageNum, setMovies);
+    //         else if(searchFilter==1)
+    //             aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+    //     }
+    // }
 
     const search = function(event){
         pageNum=1;
-        searchFilter = 1;
-        aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+        if(isSearching==0){
+            isSearching = 1;
+            if(searchFilter==0)
+                setSearchFilter(1);
+        }
+
+        if(searchFilter==1){
+            aj.getPostsByMovieTitle(searchBox.current.value, setPosts);
+            aj.getPostsByMovieTitle_movies(searchBox.current.value, setMovies);
+        }
+        else if(searchFilter==2){
+            aj.getPostsByGenre(searchBox.current.value, setPosts);
+            aj.getPostsByGenre_movies(searchBox.current.value, setMovies);
+        }
+        else if(searchFilter==3){
+            aj.getPostsByRating(searchBox.current.value, flagFilter, setPosts);
+            aj.getPostsByRating_movies(searchBox.current.value, flagFilter, setMovies);
+        }
+        else if(searchFilter==4){
+            aj.getPostsByUser(searchBox.current.value, setPosts);
+            aj.getPostsByUser_movies(searchBox.current.value, setMovies);
+        }
+            
     }
     return (
         <div>
@@ -68,9 +91,9 @@ function Feed() {
                             <center>
                                 <h1>Feed</h1>
                                 <br/>
-                                <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
+                                {/* <button className="oneLine" onClick={() => { prePage() }}>&lt;</button>
                                 <h4 className="oneLine">{pageNum}</h4>
-                                <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button>
+                                <button className="oneLine" onClick={() => { nextPage() }}>&gt;</button> */}
                                 <div className="moviesList1">
                                     <div>
                                     {moviesList}
@@ -80,11 +103,22 @@ function Feed() {
                         </div>
                     </div>
                     <div className="col-3">
-                        <form>
+                        <form className="searchSpan">
                             <label htmlFor="search">Search</label>
                             <input id="search" type="search" pattern=".*\S.*" ref={searchBox} onKeyUp={search} required/>
                             <span className="caret"></span>
                         </form>
+                        <div className="dropdown dropMenu">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"> Filter</button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><button className="dropdown-item" onClick={() => { setSearchFilter(1); document.querySelector('#dropdownMenuButton1').innerHTML = 'Movie Name' }}>Movie Name</button></li>
+                                <li><button className="dropdown-item" onClick={() => { setSearchFilter(2); document.querySelector('#dropdownMenuButton1').innerHTML = 'Movie Genre' }}>Movie Genre</button></li>
+                                <li><button className="dropdown-item" onClick={() => { setSearchFilter(4); document.querySelector('#dropdownMenuButton1').innerHTML = 'Post Writer' }}>Post Writer</button></li>
+                                <li><button className="dropdown-item" onClick={() => { setSearchFilter(3); setFlagFilter(-1);document.querySelector('#dropdownMenuButton1').innerHTML = 'Post Rating Smaller than' }}>Post Rating Smaller than</button></li>
+                                <li><button className="dropdown-item" onClick={() => { setSearchFilter(3); setFlagFilter(0);document.querySelector('#dropdownMenuButton1').innerHTML = 'Post Rating Equal to' }}>Post Rating Equal to</button></li>
+                                <li><button className="dropdown-item" onClick={() => { setSearchFilter(3); setFlagFilter(1);document.querySelector('#dropdownMenuButton1').innerHTML = 'Post Rating Greater than' }}>Post Rating Greater than</button></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 

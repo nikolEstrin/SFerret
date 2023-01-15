@@ -86,10 +86,17 @@ namespace sferretAPI.Controllers
             return Ok(posts);
         }
 
-        [HttpGet("User/{userId}")]
-        public async Task<IActionResult> GetByUser(int userId)
+        [HttpGet("Movie/Title/{title}")]
+        public async Task<IActionResult> GetByMovieTitle(string title)
         {
-            var posts = await _postService.GetByUser(userId);
+            var posts = await _postService.GetByMovieTitle(title);
+            return Ok(posts);
+        }
+
+        [HttpGet("User/{name}")]
+        public async Task<IActionResult> GetByUser(string name)
+        {
+            var posts = await _postService.GetByUser(name);
             return Ok(posts);
         }
 
@@ -115,10 +122,17 @@ namespace sferretAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("User/{userId}/Movies")]
-        public async Task<IActionResult> GetByUser_Movies(int userId)
+        [HttpGet("User/{name}/Movies")]
+        public async Task<IActionResult> GetByUser_Movies(string name)
         {
-            var posts = await _postService.GetByUser_Movies(userId);
+            var posts = await _postService.GetByUser_Movies(name);
+            return Ok(posts);
+        }
+
+        [HttpGet("Movie/Title/{title}/Movies")]
+        public async Task<IActionResult> GetByMovieTitle_Movies(string title)
+        {
+            var posts = await _postService.GetByMovieTitle_Movies(title);
             return Ok(posts);
         }
     }

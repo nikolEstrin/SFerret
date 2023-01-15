@@ -75,9 +75,23 @@ namespace sferretAPI.Services.IServices
         /// <summary>
         /// Get all posts that a given user wrote
         /// </summary>
-        /// <param name="userId">User's id</param>
+        /// <param name="name">User's name</param>
         /// <returns>List of Post objects</returns>
-        public Task<List<Post>> GetByUser(int userId);
+        public Task<List<Post>> GetByUser(string name);
+
+        /// <summary>
+        /// Get all posts about movies with given title
+        /// </summary>
+        /// <param name="title">Movie's title</param>
+        /// <returns>List of Post objects</returns>
+        public Task<List<Post>> GetByMovieTitle(string title);
+
+        /// <summary>
+        /// Get all movies that have posts in DB with given title
+        /// </summary>
+        /// <param name="title">Movie's title</param>
+        /// <returns>List of Movie objects</returns>
+        public Task<List<Movie>> GetByMovieTitle_Movies(string title);
 
         /// <summary>
         /// Retrive all movies that have posts in DB
@@ -106,8 +120,8 @@ namespace sferretAPI.Services.IServices
         /// <summary>
         /// Get all movies that have posts in DB that a given user wrote
         /// </summary>
-        /// <param name="userId">User's id</param>
+        /// <param name="name">User's name</param>
         /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByUser_Movies(int userId);
+        public Task<List<Movie>> GetByUser_Movies(string name);
     }
 }

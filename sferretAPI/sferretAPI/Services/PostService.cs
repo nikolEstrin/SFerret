@@ -2,6 +2,7 @@
 using sferretAPI.Models;
 using sferretAPI.Services.IServices;
 using System.Data;
+using System.Security.Cryptography;
 
 
 namespace sferretAPI.Services
@@ -395,6 +396,47 @@ namespace sferretAPI.Services
             }
         }
 
+        public async Task<List<Post>> GetByMovieTitle(string title)
+        {
+            try
+            {
+                List<Post> posts = new List<Post>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getPostSql = @"SELECT Post.* FROM Post, Movie
+                    WHERE Post.MovieId = Movie.Id AND REGEXP_LIKE (Movie.Title, @Title)";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Title";
+                        param.Value = title;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Post post = new Post();
+                                post.Id = reader.GetInt32("Id");
+                                post.UserId = reader.GetInt32("UserId");
+                                post.MovieId = reader.GetInt32("MovieId");
+                                post.Comment = reader.GetString("Comment");
+                                post.Rating = reader.GetInt32("Rating");
+                                post.PublishedDate = reader.GetDateTime("PublishedDate");
+                                posts.Add(post);
+                            }
+                        }
+                    }
+                }
+                return posts;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<Post>> GetByRating(int rating, int flag)
         {
             try
@@ -441,7 +483,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Post>> GetByUser(int userId)
+        public async Task<List<Post>> GetByUser(string name)
         {
             try
             {
@@ -450,12 +492,13 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getPostSql = "SELECT * FROM Post WHERE UserId = @UserId";
+                    string getPostSql = @"SELECT Post.* FROM Post, User 
+                    WHERE User.Id = Post.UserId AND REGEXP_LIKE (User.FullName, @Name)";
                     using (MySqlCommand command = new MySqlCommand(getPostSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
-                        param.ParameterName = "@UserId";
-                        param.Value = userId;
+                        param.ParameterName = "@Name";
+                        param.Value = name;
                         command.Parameters.Add(param);
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
@@ -595,7 +638,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByUser_Movies(int userId)
+        public async Task<List<Movie>> GetByUser_Movies(string name)
         {
             try
             {
@@ -605,12 +648,49 @@ namespace sferretAPI.Services
                 {
                     if (con.State != ConnectionState.Open)
                         con.Open();
-                    string getPostSql = "SELECT DISTINCT MovieId FROM Post WHERE UserId = @UserId";
+                    string getPostSql = @"SELECT DISTINCT Post.MovieId FROM Post, User 
+                    WHERE User.Id = Post.UserId AND REGEXP_LIKE (User.FullName, @Name)";
                     using (MySqlCommand command = new MySqlCommand(getPostSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
-                        param.ParameterName = "@UserId";
-                        param.Value = userId;
+                        param.ParameterName = "@Name";
+                        param.Value = name;
+                        command.Parameters.Add(param);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                mid = reader.GetInt32("MovieId");
+                                posts.Add(mid);
+                            }
+                        }
+                    }
+                }
+                return await ConvertMovies(posts);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Movie>> GetByMovieTitle_Movies(string title)
+        {
+            try
+            {
+                List<int> posts = new List<int>();
+                int mid;
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    string getPostSql = @"SELECT DISTINCT Post.MovieId FROM Post, Movie
+                    WHERE Post.MovieId = Movie.Id AND REGEXP_LIKE (Movie.Title, @Title)";
+                    using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                    {
+                        MySqlParameter param = new MySqlParameter();
+                        param.ParameterName = "@Title";
+                        param.Value = title;
                         command.Parameters.Add(param);
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {

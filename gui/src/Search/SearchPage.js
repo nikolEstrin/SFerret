@@ -11,7 +11,6 @@ function SearchPage() {
     const searchBox = useRef(null);
     const [searchFilter, setSearchFilter] = useState('') //0=regular, 1=regularSearch, 2=collection, 3=language, 4=runtime, 5=date, 6=genre, 7=rating, 8=post
     const [flagFilter, setFlagFilter] = useState('')
-    //setSearchFilter(0);
 
     useEffect(() =>{
         aj.getMovies(1, setMovies)
@@ -30,6 +29,19 @@ function SearchPage() {
             aj.getMovies(pageNum, setMovies);
         else if(searchFilter==1)
             aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==2)
+            aj.getMoviesByCollection(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==3)
+            aj.getMoviesByCollection(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==4)
+            aj.getMoviesByRuntime(searchBox.current.value, flagFilter, pageNum, setMovies);
+        // else if(searchFilter==5)
+        //     aj.getMoviesByRuntime(searchBox.current.value, flagFilter, pageNum, setMovies);
+        else if(searchFilter==6)
+            aj.getMoviesByGenre(searchBox.current.value, pageNum, setMovies);
+        else if(searchFilter==7)
+            aj.getMoviesByRating(searchBox.current.value, flagFilter, pageNum, setMovies);
+
     }
     const prePage = function (event) {
         if (pageNum > 1) {
@@ -38,6 +50,18 @@ function SearchPage() {
                 aj.getMovies(pageNum, setMovies);
             else if(searchFilter==1)
                 aj.getMoviesByTitle(searchBox.current.value, pageNum, setMovies);
+            else if(searchFilter==2)
+            aj.getMoviesByCollection(searchBox.current.value, pageNum, setMovies);
+            else if(searchFilter==3)
+                aj.getMoviesByCollection(searchBox.current.value, pageNum, setMovies);
+            else if(searchFilter==4)
+                aj.getMoviesByRuntime(searchBox.current.value, flagFilter, pageNum, setMovies);
+            // else if(searchFilter==5)
+            //     aj.getMoviesByRuntime(searchBox.current.value, flagFilter, pageNum, setMovies);
+            else if(searchFilter==6)
+                aj.getMoviesByGenre(searchBox.current.value, pageNum, setMovies);
+            else if(searchFilter==7)
+                aj.getMoviesByRating(searchBox.current.value, flagFilter, pageNum, setMovies);
         }
     }
 

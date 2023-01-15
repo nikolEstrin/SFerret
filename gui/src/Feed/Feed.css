@@ -16,6 +16,7 @@ body, input {
 
 form, input, .caret {
 	margin: auto;
+	color: white;
 }
 form {
 	position: relative;
@@ -132,4 +133,8 @@ label {
 	overflow-y: auto;
 	height: 550px;
 	width: 90%;
+}
+
+.searchSpan{
+	margin-top: 40%;
 }
