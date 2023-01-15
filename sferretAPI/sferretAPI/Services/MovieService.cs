@@ -383,15 +383,20 @@ namespace sferretAPI.Services
                                                                        FROM Post
                                                                        GROUP BY MovieId) AS countTable) ";
                     else //Min num of posts
-                        getMovieSql = @"SELECT *
-                                        FROM Movie, ((SELECT MovieId AS ID, Count(*) as counter
-                                                    FROM Post
-                                                    GROUP BY MovieId) UNION ALL
-                                                    (SELECT Id AS ID, 0 AS counter
-                                                    FROM Movie
-                                                    Where Movie.Id NOT IN(SELECT distinct MovieId From Post))) AS a
-                                        WHERE Movie.Id=a.Id AND (SELECT MIN(counter)
-                                        FROM a)";
+                        getMovieSql = @"SELECT * 
+                                        FROM movie, ((SELECT MovieId AS id, Count(*) as counter
+												    FROM Post
+												    GROUP BY MovieId) UNION ALL
+												    (SELECT Id AS ID, 0 AS counter
+												    FROM Movie
+												    Where Movie.Id NOT IN(SELECT distinct MovieId From Post))) AS a
+                                        WHERE movie.id=a.id and a.counter=(SELECT MIN(b.counter)
+									                                        FROM ((SELECT MovieId AS ID, Count(*) as counter
+												                                        FROM Post
+												                                        GROUP BY MovieId) UNION ALL
+												                                        (SELECT Id AS ID, 0 AS counter
+												                                        FROM Movie
+												                                        Where Movie.Id NOT IN(SELECT distinct MovieId From Post))) AS b)";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         using (MySqlDataReader reader = command.ExecuteReader())
@@ -451,7 +456,7 @@ namespace sferretAPI.Services
                                                     (SELECT Id AS ID , 0 AS avg
                                                     FROM Movie
                                                     WHERE Movie.Id NOT IN (SELECT distinct MovieId From Post))) AS a
-                                        WHERE Movie.Id = a.ID AND a.avg > @X";
+                                        WHERE Movie.Id = a.ID AND a.avg < @X";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
