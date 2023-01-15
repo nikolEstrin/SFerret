@@ -105,7 +105,8 @@ namespace sferretAPI.Services
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getMovieSql = @"SELECT * FROM Movie 
-                                          WHERE Id NOT IN(SELECT MovieId FROM WatchList WHERE UserId=@Id)";
+                                          WHERE Id NOT IN((SELECT MovieId FROM WatchList WHERE UserId=@Id) UNION ALL
+                                            (SELECT MovieId From Post WHERE UserId=@Id))";
                     using (MySqlCommand command = new MySqlCommand(getMovieSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
