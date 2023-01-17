@@ -126,7 +126,9 @@ function Login() {
 				<div id='ChangeToRegisterCan' className='ChangeToRegisterCanvas'>
 					<h1 className='textSwitch'>New Here?</h1>
 					<br />
-					<em className='textSwitch3'>Enter your personal details and let's get started!</em>
+					<center>
+						<em className='textSwitch3'>Enter your personal details and let's get started!</em>
+					</center>
 					<br />
 					<button onClick={() => { handleSwitchToRegister() }} className='loginBtn'>Sign Up</button>
 				</div>

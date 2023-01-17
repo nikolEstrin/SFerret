@@ -26,18 +26,16 @@ export function getMovies(page, setMovies){
     });
 }
 
-export async function getMoviesNotWatched(id, page){
-    var d;
+export async function getMoviesNotWatched(id, page, setMovies){
     await $.ajax({
         url:"https://localhost:7144/Movies/"+id+"?page="+page,
         type:'GET',
         data:{},
         success:function(data) {
-            d = data;
+            setMovies(data);
         }, 
-        error: function(){ d = []; },
+        error: function(){ },
     });
-    return d;
 }
 
 export async function getMoviesByCollection(coll, page, setMovies){
@@ -278,11 +276,10 @@ export async function UpdatePost(user, movie, rating, comment){
 export async function DeletePost(user, movie){
     var d;
     await $.ajax({
-        url:"https://localhost:7144/Post",
+        url:"https://localhost:7144/Post/"+user+"/"+movie,
         type:'DELETE',
         contentType:"application/json",
-        data: JSON.stringify({id: 0, userId: user, movieId: movie, rating: 0, comment: "delete me", publishedDate: "2023-01-18"}),
-        success:function(){}, 
+        success:function(){console.log("deleted")}, 
         error: function(data){
           console.log(data);
         },

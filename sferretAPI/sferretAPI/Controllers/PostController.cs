@@ -32,7 +32,7 @@ namespace sferretAPI.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{userId}/{movieId}")]
         public async Task<IActionResult> Delete(int movieId, int userId)
         {
             await _postService.Delete(movieId, userId);

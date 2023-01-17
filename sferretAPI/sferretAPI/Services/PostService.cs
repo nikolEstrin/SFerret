@@ -104,7 +104,7 @@ namespace sferretAPI.Services
                         command.Parameters.Add(param);
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
-                            if (reader.HasRows)
+                            if (!reader.HasRows)
                                 throw new Exception("user didnt post about this movie");
                         }
                     }
@@ -524,7 +524,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetAll_Movies()
+        public async Task<List<PostMovie>> GetAll_Movies()
         {
             try
             {
@@ -555,7 +555,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByGenre_Movies(string genre)
+        public async Task<List<PostMovie>> GetByGenre_Movies(string genre)
         {
 
             //var dbGenre = await con.QueryAsync<Genre>("SELECT * FROM Genre WHERE Name = @Name", new { Name = genre });
@@ -597,7 +597,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByRating_Movies(int rating, int flag)
+        public async Task<List<PostMovie>> GetByRating_Movies(int rating, int flag)
         {
             try
             {
@@ -638,7 +638,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByUser_Movies(string name)
+        public async Task<List<PostMovie>> GetByUser_Movies(string name)
         {
             try
             {
@@ -674,7 +674,7 @@ namespace sferretAPI.Services
             }
         }
 
-        public async Task<List<Movie>> GetByMovieTitle_Movies(string title)
+        public async Task<List<PostMovie>> GetByMovieTitle_Movies(string title)
         {
             try
             {
@@ -711,11 +711,11 @@ namespace sferretAPI.Services
         }
 
         /// <summary>
-        /// Convert from list of ids to list of Movie objects
+        /// Convert from list of ids to list of PostMovie objects
         /// </summary>
         /// <param name="movies">List of movie ids</param>
-        /// <returns>List of Movie objects</returns>
-        private async Task<List<Movie>> ConvertMovies(IEnumerable<int> movies)
+        /// <returns>List of PostMovie objects</returns>
+        private async Task<List<PostMovie>> ConvertMovies(IEnumerable<int> movies)
         {
             try
             {
@@ -725,7 +725,42 @@ namespace sferretAPI.Services
                     Movie movie = await _movieService.Get(item);
                     MovieList.Add(movie);
                 }
-                return MovieList;
+                List<PostMovie> PostMovieList = new List<PostMovie>();
+                using (MySqlConnection con = new MySqlConnection(_connectionstring))
+                {
+                    if (con.State != ConnectionState.Open)
+                        con.Open();
+                    foreach (Movie movie in MovieList)
+                    {
+                        PostMovie pm = new PostMovie();
+                        pm.Id = movie.Id;
+                        pm.Title = movie.Title;
+                        pm.Adult = movie.Adult;
+                        pm.Overview = movie.Overview;
+                        pm.PosterPath = movie.PosterPath;
+                        pm.Collection = movie.Collection;
+                        pm.Language = movie.Language;
+                        pm.ReleaseDate = movie.ReleaseDate;
+                        pm.Runtime = movie.Runtime;
+                        string getPostSql = @"SELECT AVG(Post.Rating) AS avgRate FROM Post WHERE Post.MovieId=@MovieId";
+                        using (MySqlCommand command = new MySqlCommand(getPostSql, con))
+                        {
+                            MySqlParameter param = new MySqlParameter();
+                            param.ParameterName = "@MovieId";
+                            param.Value = pm.Id;
+                            command.Parameters.Add(param);
+                            using (MySqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    pm.AvgRating = reader.GetFloat("avgRate");
+                                }
+                            }
+                        }
+                        PostMovieList.Add(pm);
+                    }
+                }
+                return PostMovieList;
             }
             catch (Exception ex)
             {

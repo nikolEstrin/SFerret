@@ -124,5 +124,18 @@ form{
 
  .stars{
     color: #fcd000 !important;
+ }
 
+ #btnDelete{
+    background-color: red;
+    border-radius: 10px;
+    padding: 3px;
+ }
+
+ #btnEdit{
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    padding: 3px;
+    width: 50px;
+    transform: translate(30%,0%);
  }

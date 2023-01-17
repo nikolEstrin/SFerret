@@ -90,14 +90,14 @@ namespace sferretAPI.Services.IServices
         /// Get all movies that have posts in DB with given title
         /// </summary>
         /// <param name="title">Movie's title</param>
-        /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByMovieTitle_Movies(string title);
+        /// <returns>List of PostMovie objects</returns>
+        public Task<List<PostMovie>> GetByMovieTitle_Movies(string title);
 
         /// <summary>
         /// Retrive all movies that have posts in DB
         /// </summary>
-        /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetAll_Movies();
+        /// <returns>List of PostMovie objects</returns>
+        public Task<List<PostMovie>> GetAll_Movies();
 
         /// <summary>
         /// Get all movies that have posts in DB that are matching with given rating
@@ -107,21 +107,21 @@ namespace sferretAPI.Services.IServices
         /// </summary>
         /// <param name="rating">Int value between 1-5/10</param>
         /// <param name="flag">"Boolean" value</param>
-        /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByRating_Movies(int rating, int flag);
+        /// <returns>List of PostMovie objects</returns>
+        public Task<List<PostMovie>> GetByRating_Movies(int rating, int flag);
 
         /// <summary>
         /// Get all movies that have posts in DB that are tagged as given genre
         /// </summary>
         /// <param name="genre">Genre name</param>
-        /// <returns>List of movie id's</returns>
-        public Task<List<Movie>> GetByGenre_Movies(string genre);
+        /// <returns>List of PostMovie objects</returns>
+        public Task<List<PostMovie>> GetByGenre_Movies(string genre);
 
         /// <summary>
         /// Get all movies that have posts in DB that a given user wrote
         /// </summary>
         /// <param name="name">User's name</param>
-        /// <returns>List of Movie objects</returns>
-        public Task<List<Movie>> GetByUser_Movies(string name);
+        /// <returns>List of PostMovie objects</returns>
+        public Task<List<PostMovie>> GetByUser_Movies(string name);
     }
 }

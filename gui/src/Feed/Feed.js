@@ -29,7 +29,7 @@ function Feed() {
     var moviesList;
     if (movies!=''){
         moviesList = movies.map((movie,key)=>{    
-            return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} posts={dictMoviePosts[movie.id]} key={key}/>
+            return <MoviePostItem adult={movie.adult} collection={movie.collection} id={movie.id} language={movie.language} overview={movie.overview} posterPath={movie.posterPath} releaseDate={movie.releaseDate} runtime={movie.runtime} title={movie.title} posts={dictMoviePosts[movie.id]} avgRating={movie.avgRating} key={key}/>
         });
     }
 

@@ -1,0 +1,16 @@
+#postPage {
+    background-color: darkgray !important;
+    padding: 100px;
+}
+
+.inputComment{
+    width: 50% !important;
+    height: 10% !important;
+}
+
+.addPostBtn{
+    margin: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color:firebrick;
+}
