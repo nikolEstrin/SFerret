@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 
 function EditPostPage(){
     const comment = useRef(null);
-    const [rating, setRating] = useState('');
+    const [rating, setRating] = useState(localStorage.getItem("rating"));
     let navi = useNavigate();
 
     const editPostModal = function(){
