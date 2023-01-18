@@ -406,7 +406,7 @@ namespace sferretAPI.Services
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getPostSql = @"SELECT Post.* FROM Post, Movie
-                    WHERE Post.MovieId = Movie.Id AND REGEXP_LIKE (Movie.Title, @Title)";
+                    WHERE Post.MovieId = Movie.Id AND REGEXP_LIKE (Movie.Title, @Title) ORDER BY Post.MovieId";
                     using (MySqlCommand command = new MySqlCommand(getPostSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
@@ -493,7 +493,7 @@ namespace sferretAPI.Services
                     if (con.State != ConnectionState.Open)
                         con.Open();
                     string getPostSql = @"SELECT Post.* FROM Post, User 
-                    WHERE User.Id = Post.UserId AND REGEXP_LIKE (User.FullName, @Name)";
+                    WHERE User.Id = Post.UserId AND REGEXP_LIKE (User.FullName, @Name) ORDER BY Post.MovieId";
                     using (MySqlCommand command = new MySqlCommand(getPostSql, con))
                     {
                         MySqlParameter param = new MySqlParameter();
